@@ -1,0 +1,28 @@
+# type InvoiceSettings {
+#   custom_fields: String
+#   default_payment_method: String
+#   footer: String
+# }
+
+type Customer {
+  id: String!
+  # object: String
+  address: String
+  # balance: Int
+  created: Int
+  currency: String
+  # default_source: String
+  # delinquent: Boolean
+  # description: String
+  # discount: String
+  email: String
+  # invoice_prefix: String
+  livemode: Boolean
+  name: String
+  # next_invoice_sequence: Int
+  phone: String
+  # shipping: String
+  # tax_exempt: String
+  # preferred_locales: [String]
+  # invoice_settings: InvoiceSettings
+}

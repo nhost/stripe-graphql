@@ -1,0 +1,129 @@
+# type StatusTransitions { finalized_at: String
+#   marked_uncollectible_at: String
+#   paid_at: String
+#   voided_at: String }
+
+# type PaymentSettings { payment_method_options: String
+#   payment_method_types: String }
+
+# type Price { id: String
+#   object: String
+#   active: Boolean
+#   billing_scheme: String
+#   created: Int
+#   currency: String
+#   livemode: Boolean
+#   lookup_key: String
+#   nickname: String
+#   product: String
+#   recurring: String
+#   tax_behavior: String
+#   tiers_mode: String
+#   transform_quantity: String
+#   type: String
+#   unit_amount: Int
+#   unit_amount_decimal: String }
+
+# type Period { end: Int start: Int }
+
+# type Data { id: String
+#   object: String
+#   amount: Int
+#   currency: String
+#   description: String
+#   discountable: Boolean
+#   invoice_item: String
+#   livemode: Boolean
+#   proration: Boolean
+#   quantity: Int
+#   subscription: String
+#   type: String
+#   tax_rates: [String ]
+#   tax_amounts: [String ]
+#   price: Price
+#   period: Period
+#   discounts: [String ]
+#   discount_amounts: [String ] }
+
+# type Lines { object: String
+#   has_more: Boolean
+#   url: String
+#   data: [Data ] }
+
+# type Address { city: String
+#   country: String
+#   line1: String
+#   line2: String
+#   postal_code: String
+#   state: String }
+
+# type CustomerShipping { name: String phone: String address: Address }
+
+# type AutomaticTax { enabled: Boolean status: String }
+
+type Invoice {
+  id: String
+  # object: String
+  # account_country: String
+  # account_name: String
+  # account_tax_ids: String
+  # amount_due: Int
+  # amount_paid: Int
+  # amount_remaining: Int
+  # application_fee_amount: String
+  # attempt_count: Int
+  # attempted: Boolean
+  # auto_advance: Boolean
+  # billing_reason: String
+  # charge: String
+  # collection_method: String
+  created: Int
+  currency: String
+  # custom_fields: String
+  customer: String
+  # customer_address: String
+  # customer_email: String
+  # customer_name: String
+  # customer_phone: String
+  # customer_tax_exempt: String
+  # default_payment_method: String
+  # default_source: String
+  # description: String
+  # discount: String
+  # due_date: String
+  # ending_balance: String
+  # footer: String
+  hosted_invoice_url: String
+  # invoice_pdf: String
+  # last_finalization_error: String
+  livemode: Boolean
+  # next_payment_attempt: Int
+  # number: String
+  # on_behalf_of: String
+  paid: Boolean
+  # payment_intent: String
+  period_end: Int
+  period_start: Int
+  # post_payment_credit_notes_amount: Int
+  # pre_payment_credit_notes_amount: Int
+  # receipt_number: String
+  # starting_balance: Int
+  # statement_descriptor: String
+  status: String
+  # subscription: String
+  subtotal: Int
+  tax: String
+  total: Int
+  # transfer_data: String
+  # webhooks_delivered_at: String
+  # total_tax_amounts: [String]
+  # total_discount_amounts: [String]
+  # status_transitions: StatusTransitions
+  # payment_settings: PaymentSettings
+  # lines: Lines
+  # discounts: [String]
+  # default_tax_rates: [String]
+  # customer_tax_ids: [String]
+  # customer_shipping: CustomerShipping
+  # automatic_tax: AutomaticTax
+}
