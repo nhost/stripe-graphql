@@ -1,0 +1,61 @@
+type Metadata {
+  order_id: String
+}
+
+type ThreeDSecureUsage {
+  supported: Boolean
+}
+
+type Networks {
+  preferred: String
+  available: [String]
+}
+
+type Checks {
+  address_line1_check: String
+  address_postal_code_check: String
+  cvc_check: String
+}
+
+type Card {
+  brand: String
+  country: String
+  exp_month: Int
+  exp_year: Int
+  fingerprint: String
+  funding: String
+  generated_from: String
+  last4: String
+  wallet: String
+  three_d_secure_usage: ThreeDSecureUsage
+  networks: Networks
+  checks: Checks
+}
+
+# type Address {
+#   city: String
+#   country: String
+#   line1: String
+#   line2: String
+#   postal_code: String
+#   state: String
+# }
+
+# type BillingDetails {
+#   email: String
+#   name: String
+#   phone: String
+#   address: Address
+# }
+
+type PaymentMethod {
+  id: String
+#   object: String
+  created: Int
+  customer: String
+  livemode: Boolean
+  type: String
+  metadata: Metadata
+  card: Card
+#   billing_details: BillingDetails
+}

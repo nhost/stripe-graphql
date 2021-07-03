@@ -2,6 +2,27 @@
 
 package model
 
+type Card struct {
+	Brand             *string            `json:"brand"`
+	Country           *string            `json:"country"`
+	ExpMonth          *int               `json:"exp_month"`
+	ExpYear           *int               `json:"exp_year"`
+	Fingerprint       *string            `json:"fingerprint"`
+	Funding           *string            `json:"funding"`
+	GeneratedFrom     *string            `json:"generated_from"`
+	Last4             *string            `json:"last4"`
+	Wallet            *string            `json:"wallet"`
+	ThreeDSecureUsage *ThreeDSecureUsage `json:"three_d_secure_usage"`
+	Networks          *Networks          `json:"networks"`
+	Checks            *Checks            `json:"checks"`
+}
+
+type Checks struct {
+	AddressLine1Check      *string `json:"address_line1_check"`
+	AddressPostalCodeCheck *string `json:"address_postal_code_check"`
+	CvcCheck               *string `json:"cvc_check"`
+}
+
 type Customer struct {
 	ID       string  `json:"id"`
 	Address  *string `json:"address"`
@@ -27,4 +48,46 @@ type Invoice struct {
 	Subtotal         *int    `json:"subtotal"`
 	Tax              *string `json:"tax"`
 	Total            *int    `json:"total"`
+}
+
+type Metadata struct {
+	OrderID *string `json:"order_id"`
+}
+
+type Networks struct {
+	Preferred *string   `json:"preferred"`
+	Available []*string `json:"available"`
+}
+
+type PaymentMethod struct {
+	ID       *string   `json:"id"`
+	Created  *int      `json:"created"`
+	Customer *string   `json:"customer"`
+	Livemode *bool     `json:"livemode"`
+	Type     *string   `json:"type"`
+	Metadata *Metadata `json:"metadata"`
+	Card     *Card     `json:"card"`
+}
+
+type Price struct {
+	ID            *string    `json:"id"`
+	Active        *bool      `json:"active"`
+	BillingScheme *string    `json:"billing_scheme"`
+	Created       *int       `json:"created"`
+	Currency      *string    `json:"currency"`
+	Livemode      *bool      `json:"livemode"`
+	Nickname      *string    `json:"nickname"`
+	Product       *string    `json:"product"`
+	Recurring     *Recurring `json:"recurring"`
+}
+
+type Recurring struct {
+	AggregateUsage *string `json:"aggregate_usage"`
+	Interval       *string `json:"interval"`
+	IntervalCount  *int    `json:"interval_count"`
+	UsageType      *string `json:"usage_type"`
+}
+
+type ThreeDSecureUsage struct {
+	Supported *bool `json:"supported"`
 }

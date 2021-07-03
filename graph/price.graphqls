@@ -1,0 +1,26 @@
+type Recurring {
+  aggregate_usage: String
+  interval: String
+  interval_count: Int
+  usage_type: String
+}
+
+type Price {
+  id: String
+  # object: String
+  active: Boolean
+  billing_scheme: String
+  created: Int
+  currency: String
+  livemode: Boolean
+  # # lookup_key: String
+  nickname: String
+  product: String
+  # tax_behavior: String
+  # tiers_mode: String
+  # transform_quantity: String
+  # type: String
+  # unit_amount: Int
+  # unit_amount_decimal: String
+  recurring: Recurring
+}

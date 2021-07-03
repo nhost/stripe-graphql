@@ -3,4 +3,8 @@ type Query {
   customer(id: ID): Customer
   invoices: [Invoice!]
   invoice(id: ID!): Invoice
+  prices: [Price!]
+  price(id: ID!): Price
+  payment_methods: [PaymentMethod!]
+  payment_method(id: ID!): PaymentMethod
 }

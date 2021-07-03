@@ -5,6 +5,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
@@ -12,6 +13,7 @@ import (
 	stripe "github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/customer"
 	"github.com/stripe/stripe-go/v72/invoice"
+	"github.com/stripe/stripe-go/v72/price"
 )
 
 func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
@@ -56,6 +58,34 @@ func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice,
 		return converted_invoice, nil
 	}
 	return nil, nil
+}
+
+func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
+	params := &stripe.PriceListParams{}
+	var prices []*model.Price
+	i := price.List(params)
+	for i.Next() {
+		converted_price := utils.ConvertPrice(*i.Price())
+		prices = append(prices, converted_price)
+	}
+	return prices, nil
+}
+
+func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, error) {
+	p, _ := price.Get(id, nil)
+	if p != nil {
+		converted_price := utils.ConvertPrice(*p)
+		return converted_price, nil
+	}
+	return nil, nil
+}
+
+func (r *queryResolver) PaymentMethods(ctx context.Context) ([]*model.PaymentMethod, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.PaymentMethod, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Query returns generated.QueryResolver implementation.
