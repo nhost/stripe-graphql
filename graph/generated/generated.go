@@ -120,6 +120,15 @@ type ComplexityRoot struct {
 		Recurring     func(childComplexity int) int
 	}
 
+	Product struct {
+		Active      func(childComplexity int) int
+		Created     func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Livemode    func(childComplexity int) int
+		Name        func(childComplexity int) int
+	}
+
 	Query struct {
 		Customer       func(childComplexity int, id *string) int
 		Customers      func(childComplexity int) int
@@ -129,6 +138,7 @@ type ComplexityRoot struct {
 		PaymentMethods func(childComplexity int, customer string, typeArg *model.PaymentMethodTypes) int
 		Price          func(childComplexity int, id string) int
 		Prices         func(childComplexity int) int
+		Products       func(childComplexity int) int
 		Subscriptions  func(childComplexity int) int
 	}
 
@@ -162,6 +172,7 @@ type QueryResolver interface {
 	PaymentMethods(ctx context.Context, customer string, typeArg *model.PaymentMethodTypes) ([]*model.PaymentMethod, error)
 	PaymentMethod(ctx context.Context, id string) (*model.PaymentMethod, error)
 	Subscriptions(ctx context.Context) ([]*model.StripeSubscription, error)
+	Products(ctx context.Context) ([]*model.Product, error)
 }
 
 type executableSchema struct {
@@ -564,6 +575,48 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Price.Recurring(childComplexity), true
 
+	case "Product.active":
+		if e.complexity.Product.Active == nil {
+			break
+		}
+
+		return e.complexity.Product.Active(childComplexity), true
+
+	case "Product.created":
+		if e.complexity.Product.Created == nil {
+			break
+		}
+
+		return e.complexity.Product.Created(childComplexity), true
+
+	case "Product.description":
+		if e.complexity.Product.Description == nil {
+			break
+		}
+
+		return e.complexity.Product.Description(childComplexity), true
+
+	case "Product.id":
+		if e.complexity.Product.ID == nil {
+			break
+		}
+
+		return e.complexity.Product.ID(childComplexity), true
+
+	case "Product.livemode":
+		if e.complexity.Product.Livemode == nil {
+			break
+		}
+
+		return e.complexity.Product.Livemode(childComplexity), true
+
+	case "Product.name":
+		if e.complexity.Product.Name == nil {
+			break
+		}
+
+		return e.complexity.Product.Name(childComplexity), true
+
 	case "Query.customer":
 		if e.complexity.Query.Customer == nil {
 			break
@@ -644,6 +697,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Prices(childComplexity), true
+
+	case "Query.products":
+		if e.complexity.Query.Products == nil {
+			break
+		}
+
+		return e.complexity.Query.Products(childComplexity), true
 
 	case "Query.subscriptions":
 		if e.complexity.Query.Subscriptions == nil {
@@ -1020,6 +1080,24 @@ type Price {
   recurring: Recurring
 }
 `, BuiltIn: false},
+	{Name: "graph/product.graphqls", Input: `type Product {
+  id: String
+#   object: String
+  active: Boolean
+  created: Int
+  description: String
+  livemode: Boolean
+  name: String
+#   package_dimensions: String
+#   shippable: String
+#   statement_descriptor: String
+#   tax_code: String
+#   unit_label: String
+#   updated: Int
+#   url: String
+#   images: [String]
+}
+`, BuiltIn: false},
 	{Name: "graph/query.graphqls", Input: `type Query {
   customers: [Customer!]
   customer(id: ID): Customer
@@ -1030,6 +1108,7 @@ type Price {
   payment_methods(customer: ID!, type: payment_method_types): [PaymentMethod!]
   payment_method(id: ID!): PaymentMethod
   subscriptions: [Stripe_Subscription!]
+  products: [Product!]
 }
 
 enum payment_method_types {
@@ -3019,6 +3098,198 @@ func (ec *executionContext) _Price_recurring(ctx context.Context, field graphql.
 	return ec.marshalORecurring2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐRecurring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Product_id(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Product_active(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Active, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Product_created(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Created, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Product_description(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Product_livemode(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Livemode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Product_name(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_customers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3340,6 +3611,38 @@ func (ec *executionContext) _Query_subscriptions(ctx context.Context, field grap
 	res := resTmp.([]*model.StripeSubscription)
 	fc.Result = res
 	return ec.marshalOStripe_Subscription2ᚕᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐStripeSubscriptionᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_products(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Products(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Product)
+	fc.Result = res
+	return ec.marshalOProduct2ᚕᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐProductᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5117,6 +5420,40 @@ func (ec *executionContext) _Price(ctx context.Context, sel ast.SelectionSet, ob
 	return out
 }
 
+var productImplementors = []string{"Product"}
+
+func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, obj *model.Product) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, productImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Product")
+		case "id":
+			out.Values[i] = ec._Product_id(ctx, field, obj)
+		case "active":
+			out.Values[i] = ec._Product_active(ctx, field, obj)
+		case "created":
+			out.Values[i] = ec._Product_created(ctx, field, obj)
+		case "description":
+			out.Values[i] = ec._Product_description(ctx, field, obj)
+		case "livemode":
+			out.Values[i] = ec._Product_livemode(ctx, field, obj)
+		case "name":
+			out.Values[i] = ec._Product_name(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -5229,6 +5566,17 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_subscriptions(ctx, field)
+				return res
+			})
+		case "products":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_products(ctx, field)
 				return res
 			})
 		case "__type":
@@ -5645,6 +5993,16 @@ func (ec *executionContext) marshalNPrice2ᚖgithubᚗcomᚋnhostᚋstripeᚑgra
 		return graphql.Null
 	}
 	return ec._Price(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Product(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -6169,6 +6527,46 @@ func (ec *executionContext) marshalOPrice2ᚖgithubᚗcomᚋnhostᚋstripeᚑgra
 		return graphql.Null
 	}
 	return ec._Price(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOProduct2ᚕᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Product) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNProduct2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐProduct(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
 }
 
 func (ec *executionContext) marshalORecurring2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐRecurring(ctx context.Context, sel ast.SelectionSet, v *model.Recurring) graphql.Marshaler {

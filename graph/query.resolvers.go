@@ -14,6 +14,7 @@ import (
 	"github.com/stripe/stripe-go/v72/invoice"
 	"github.com/stripe/stripe-go/v72/paymentmethod"
 	"github.com/stripe/stripe-go/v72/price"
+	"github.com/stripe/stripe-go/v72/product"
 	"github.com/stripe/stripe-go/v72/sub"
 )
 
@@ -135,6 +136,19 @@ func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubsc
 		subscriptions = append(subscriptions, converted_object)
 	}
 	return subscriptions, nil
+}
+
+func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
+	params := stripe.ProductListParams{}
+	i := product.List(&params)
+
+	var products []*model.Product
+	for i.Next() {
+		converted_product := utils.ConvertProduct(*i.Product())
+		products = append(products, converted_product)
+	}
+
+	return products, nil
 }
 
 // Query returns generated.QueryResolver implementation.

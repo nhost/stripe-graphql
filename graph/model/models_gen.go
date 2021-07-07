@@ -87,6 +87,15 @@ type Price struct {
 	Recurring     *Recurring `json:"recurring"`
 }
 
+type Product struct {
+	ID          *string `json:"id"`
+	Active      *bool   `json:"active"`
+	Created     *int    `json:"created"`
+	Description *string `json:"description"`
+	Livemode    *bool   `json:"livemode"`
+	Name        *string `json:"name"`
+}
+
 type Recurring struct {
 	AggregateUsage *string `json:"aggregate_usage"`
 	Interval       *string `json:"interval"`
