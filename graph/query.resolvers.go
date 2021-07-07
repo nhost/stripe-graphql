@@ -138,6 +138,21 @@ func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubsc
 	return subscriptions, nil
 }
 
+func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.StripeSubscription, error) {
+	p, err := sub.Get(id, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if p != nil {
+		converted_sub := utils.ConvertSubscription(*p)
+		return converted_sub, nil
+	}
+
+	return nil, nil
+}
+
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
 	params := stripe.ProductListParams{}
 	i := product.List(&params)
@@ -149,6 +164,21 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 	}
 
 	return products, nil
+}
+
+func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
+	p, err := product.Get(id, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if p != nil {
+		converted_product := utils.ConvertProduct(*p)
+		return converted_product, nil
+	}
+
+	return nil, nil
 }
 
 // Query returns generated.QueryResolver implementation.

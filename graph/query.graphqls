@@ -8,7 +8,9 @@ type Query {
   payment_methods(customer: ID!, type: payment_method_types): [PaymentMethod!]
   payment_method(id: ID!): PaymentMethod
   subscriptions: [Stripe_Subscription!]
+  subscription(id: ID!): Stripe_Subscription
   products: [Product!]
+  product(id: ID!): Product
 }
 
 enum payment_method_types {
