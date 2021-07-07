@@ -5,6 +5,28 @@ type Query {
   invoice(id: ID!): Invoice
   prices: [Price!]
   price(id: ID!): Price
-  payment_methods: [PaymentMethod!]
+  payment_methods(customer: ID!, type: payment_method_types): [PaymentMethod!]
   payment_method(id: ID!): PaymentMethod
+  subscriptions: [Stripe_Subscription!]
+}
+
+enum payment_method_types {
+  acss_debit
+  afterpay_clearpay
+  alipay
+  au_becs_debit
+  bacs_debit
+  bancontact
+  boleto
+  card
+  eps
+  fpx
+  giropay
+  grabpay
+  ideal
+  oxxo
+  p24
+  sepa_debit
+  sofort
+  wechat_pay
 }

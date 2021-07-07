@@ -2,6 +2,12 @@
 
 package model
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
 type Card struct {
 	Brand             *string            `json:"brand"`
 	Country           *string            `json:"country"`
@@ -88,6 +94,87 @@ type Recurring struct {
 	UsageType      *string `json:"usage_type"`
 }
 
+type StripeSubscription struct {
+	ID                 *string `json:"id"`
+	CancelAtPeriodEnd  *bool   `json:"cancel_at_period_end"`
+	CurrentPeriodEnd   *int    `json:"current_period_end"`
+	CurrentPeriodStart *int    `json:"current_period_start"`
+	Status             *string `json:"status"`
+}
+
 type ThreeDSecureUsage struct {
 	Supported *bool `json:"supported"`
+}
+
+type PaymentMethodTypes string
+
+const (
+	PaymentMethodTypesAcssDebit        PaymentMethodTypes = "acss_debit"
+	PaymentMethodTypesAfterpayClearpay PaymentMethodTypes = "afterpay_clearpay"
+	PaymentMethodTypesAlipay           PaymentMethodTypes = "alipay"
+	PaymentMethodTypesAuBecsDebit      PaymentMethodTypes = "au_becs_debit"
+	PaymentMethodTypesBacsDebit        PaymentMethodTypes = "bacs_debit"
+	PaymentMethodTypesBancontact       PaymentMethodTypes = "bancontact"
+	PaymentMethodTypesBoleto           PaymentMethodTypes = "boleto"
+	PaymentMethodTypesCard             PaymentMethodTypes = "card"
+	PaymentMethodTypesEps              PaymentMethodTypes = "eps"
+	PaymentMethodTypesFpx              PaymentMethodTypes = "fpx"
+	PaymentMethodTypesGiropay          PaymentMethodTypes = "giropay"
+	PaymentMethodTypesGrabpay          PaymentMethodTypes = "grabpay"
+	PaymentMethodTypesIdeal            PaymentMethodTypes = "ideal"
+	PaymentMethodTypesOxxo             PaymentMethodTypes = "oxxo"
+	PaymentMethodTypesP24              PaymentMethodTypes = "p24"
+	PaymentMethodTypesSepaDebit        PaymentMethodTypes = "sepa_debit"
+	PaymentMethodTypesSofort           PaymentMethodTypes = "sofort"
+	PaymentMethodTypesWechatPay        PaymentMethodTypes = "wechat_pay"
+)
+
+var AllPaymentMethodTypes = []PaymentMethodTypes{
+	PaymentMethodTypesAcssDebit,
+	PaymentMethodTypesAfterpayClearpay,
+	PaymentMethodTypesAlipay,
+	PaymentMethodTypesAuBecsDebit,
+	PaymentMethodTypesBacsDebit,
+	PaymentMethodTypesBancontact,
+	PaymentMethodTypesBoleto,
+	PaymentMethodTypesCard,
+	PaymentMethodTypesEps,
+	PaymentMethodTypesFpx,
+	PaymentMethodTypesGiropay,
+	PaymentMethodTypesGrabpay,
+	PaymentMethodTypesIdeal,
+	PaymentMethodTypesOxxo,
+	PaymentMethodTypesP24,
+	PaymentMethodTypesSepaDebit,
+	PaymentMethodTypesSofort,
+	PaymentMethodTypesWechatPay,
+}
+
+func (e PaymentMethodTypes) IsValid() bool {
+	switch e {
+	case PaymentMethodTypesAcssDebit, PaymentMethodTypesAfterpayClearpay, PaymentMethodTypesAlipay, PaymentMethodTypesAuBecsDebit, PaymentMethodTypesBacsDebit, PaymentMethodTypesBancontact, PaymentMethodTypesBoleto, PaymentMethodTypesCard, PaymentMethodTypesEps, PaymentMethodTypesFpx, PaymentMethodTypesGiropay, PaymentMethodTypesGrabpay, PaymentMethodTypesIdeal, PaymentMethodTypesOxxo, PaymentMethodTypesP24, PaymentMethodTypesSepaDebit, PaymentMethodTypesSofort, PaymentMethodTypesWechatPay:
+		return true
+	}
+	return false
+}
+
+func (e PaymentMethodTypes) String() string {
+	return string(e)
+}
+
+func (e *PaymentMethodTypes) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = PaymentMethodTypes(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid payment_method_types", str)
+	}
+	return nil
+}
+
+func (e PaymentMethodTypes) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

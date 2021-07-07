@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
@@ -13,7 +12,9 @@ import (
 	stripe "github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/customer"
 	"github.com/stripe/stripe-go/v72/invoice"
+	"github.com/stripe/stripe-go/v72/paymentmethod"
 	"github.com/stripe/stripe-go/v72/price"
+	"github.com/stripe/stripe-go/v72/sub"
 )
 
 func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
@@ -29,7 +30,12 @@ func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error
 }
 
 func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Customer, error) {
-	c, _ := customer.Get(*id, nil)
+	c, err := customer.Get(*id, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
 	if c != nil {
 		converted_customer := utils.ConvertCustomer(c)
 		return converted_customer, nil
@@ -52,7 +58,12 @@ func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) 
 }
 
 func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice, error) {
-	i, _ := invoice.Get(id, nil)
+	i, err := invoice.Get(id, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
 	if i != nil {
 		converted_invoice := utils.ConvertInvoice(i)
 		return converted_invoice, nil
@@ -72,7 +83,12 @@ func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
 }
 
 func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, error) {
-	p, _ := price.Get(id, nil)
+	p, err := price.Get(id, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
 	if p != nil {
 		converted_price := utils.ConvertPrice(*p)
 		return converted_price, nil
@@ -80,12 +96,45 @@ func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, err
 	return nil, nil
 }
 
-func (r *queryResolver) PaymentMethods(ctx context.Context) ([]*model.PaymentMethod, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typeArg *model.PaymentMethodTypes) ([]*model.PaymentMethod, error) {
+	params := &stripe.PaymentMethodListParams{
+		Customer: &customer,
+		Type:     (*string)(typeArg),
+	}
+	i := paymentmethod.List(params)
+	var payment_methods []*model.PaymentMethod
+	for i.Next() {
+		converted_object := utils.ConvertPaymentMethod(i.PaymentMethod())
+		payment_methods = append(payment_methods, converted_object)
+	}
+	return payment_methods, nil
 }
 
 func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.PaymentMethod, error) {
-	panic(fmt.Errorf("not implemented"))
+	p, err := paymentmethod.Get(id, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if p != nil {
+		converted_pmethod := utils.ConvertPaymentMethod(p)
+		return converted_pmethod, nil
+	}
+
+	return nil, nil
+}
+
+func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubscription, error) {
+	params := &stripe.SubscriptionListParams{}
+	i := sub.List(params)
+
+	var subscriptions []*model.StripeSubscription
+	for i.Next() {
+		converted_object := utils.ConvertSubscription(*i.Subscription())
+		subscriptions = append(subscriptions, converted_object)
+	}
+	return subscriptions, nil
 }
 
 // Query returns generated.QueryResolver implementation.

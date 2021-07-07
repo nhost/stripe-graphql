@@ -126,9 +126,10 @@ type ComplexityRoot struct {
 		Invoice        func(childComplexity int, id string) int
 		Invoices       func(childComplexity int) int
 		PaymentMethod  func(childComplexity int, id string) int
-		PaymentMethods func(childComplexity int) int
+		PaymentMethods func(childComplexity int, customer string, typeArg *model.PaymentMethodTypes) int
 		Price          func(childComplexity int, id string) int
 		Prices         func(childComplexity int) int
+		Subscriptions  func(childComplexity int) int
 	}
 
 	Recurring struct {
@@ -136,6 +137,14 @@ type ComplexityRoot struct {
 		Interval       func(childComplexity int) int
 		IntervalCount  func(childComplexity int) int
 		UsageType      func(childComplexity int) int
+	}
+
+	StripeSubscription struct {
+		CancelAtPeriodEnd  func(childComplexity int) int
+		CurrentPeriodEnd   func(childComplexity int) int
+		CurrentPeriodStart func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Status             func(childComplexity int) int
 	}
 
 	ThreeDSecureUsage struct {
@@ -150,8 +159,9 @@ type QueryResolver interface {
 	Invoice(ctx context.Context, id string) (*model.Invoice, error)
 	Prices(ctx context.Context) ([]*model.Price, error)
 	Price(ctx context.Context, id string) (*model.Price, error)
-	PaymentMethods(ctx context.Context) ([]*model.PaymentMethod, error)
+	PaymentMethods(ctx context.Context, customer string, typeArg *model.PaymentMethodTypes) ([]*model.PaymentMethod, error)
 	PaymentMethod(ctx context.Context, id string) (*model.PaymentMethod, error)
+	Subscriptions(ctx context.Context) ([]*model.StripeSubscription, error)
 }
 
 type executableSchema struct {
@@ -609,7 +619,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.PaymentMethods(childComplexity), true
+		args, err := ec.field_Query_payment_methods_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.PaymentMethods(childComplexity, args["customer"].(string), args["type"].(*model.PaymentMethodTypes)), true
 
 	case "Query.price":
 		if e.complexity.Query.Price == nil {
@@ -629,6 +644,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Prices(childComplexity), true
+
+	case "Query.subscriptions":
+		if e.complexity.Query.Subscriptions == nil {
+			break
+		}
+
+		return e.complexity.Query.Subscriptions(childComplexity), true
 
 	case "Recurring.aggregate_usage":
 		if e.complexity.Recurring.AggregateUsage == nil {
@@ -657,6 +679,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Recurring.UsageType(childComplexity), true
+
+	case "Stripe_Subscription.cancel_at_period_end":
+		if e.complexity.StripeSubscription.CancelAtPeriodEnd == nil {
+			break
+		}
+
+		return e.complexity.StripeSubscription.CancelAtPeriodEnd(childComplexity), true
+
+	case "Stripe_Subscription.current_period_end":
+		if e.complexity.StripeSubscription.CurrentPeriodEnd == nil {
+			break
+		}
+
+		return e.complexity.StripeSubscription.CurrentPeriodEnd(childComplexity), true
+
+	case "Stripe_Subscription.current_period_start":
+		if e.complexity.StripeSubscription.CurrentPeriodStart == nil {
+			break
+		}
+
+		return e.complexity.StripeSubscription.CurrentPeriodStart(childComplexity), true
+
+	case "Stripe_Subscription.id":
+		if e.complexity.StripeSubscription.ID == nil {
+			break
+		}
+
+		return e.complexity.StripeSubscription.ID(childComplexity), true
+
+	case "Stripe_Subscription.status":
+		if e.complexity.StripeSubscription.Status == nil {
+			break
+		}
+
+		return e.complexity.StripeSubscription.Status(childComplexity), true
 
 	case "ThreeDSecureUsage.supported":
 		if e.complexity.ThreeDSecureUsage.Supported == nil {
@@ -970,8 +1027,89 @@ type Price {
   invoice(id: ID!): Invoice
   prices: [Price!]
   price(id: ID!): Price
-  payment_methods: [PaymentMethod!]
+  payment_methods(customer: ID!, type: payment_method_types): [PaymentMethod!]
   payment_method(id: ID!): PaymentMethod
+  subscriptions: [Stripe_Subscription!]
+}
+
+enum payment_method_types {
+  acss_debit
+  afterpay_clearpay
+  alipay
+  au_becs_debit
+  bacs_debit
+  bancontact
+  boleto
+  card
+  eps
+  fpx
+  giropay
+  grabpay
+  ideal
+  oxxo
+  p24
+  sepa_debit
+  sofort
+  wechat_pay
+}
+`, BuiltIn: false},
+	{Name: "graph/susbscription.graphqls", Input: `# type Data {
+#   id: String
+#   object: String
+#   billing_thresholds: String
+#   created: Int
+#   quantity: Int
+#   subscription: String
+#   tax_rates: [String]
+#   price: Price
+# }
+
+# type Items {
+#   object: String
+#   has_more: Boolean
+#   url: String
+#   data: [Data]
+# }
+
+# type AutomaticTax {
+#   enabled: Boolean
+# }
+
+type Stripe_Subscription {
+  id: String
+#   object: String
+#   application_fee_percent: String
+#   billing_cycle_anchor: Int
+#   billing_thresholds: String
+#   cancel_at: String
+  cancel_at_period_end: Boolean
+#   canceled_at: String
+#   collection_method: String
+#   created: Int
+  current_period_end: Int
+  current_period_start: Int
+#   customer: String
+#   days_until_due: String
+#   default_payment_method: String
+#   default_source: String
+#   discount: String
+#   ended_at: String
+#   latest_invoice: String
+#   livemode: Boolean
+#   next_pending_invoice_item_invoice: String
+#   pause_collection: String
+#   pending_invoice_item_interval: String
+#   pending_setup_intent: String
+#   pending_update: String
+#   schedule: String
+#   start_date: Int
+  status: String
+#   transfer_data: String
+#   trial_end: String
+#   trial_start: String
+#   items: Items
+#   default_tax_rates: [String]
+#   automatic_tax: AutomaticTax
 }
 `, BuiltIn: false},
 }
@@ -1038,6 +1176,30 @@ func (ec *executionContext) field_Query_payment_method_args(ctx context.Context,
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_payment_methods_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["customer"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customer"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["customer"] = arg0
+	var arg1 *model.PaymentMethodTypes
+	if tmp, ok := rawArgs["type"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+		arg1, err = ec.unmarshalOpayment_method_types2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐPaymentMethodTypes(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["type"] = arg1
 	return args, nil
 }
 
@@ -3086,9 +3248,16 @@ func (ec *executionContext) _Query_payment_methods(ctx context.Context, field gr
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_payment_methods_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().PaymentMethods(rctx)
+		return ec.resolvers.Query().PaymentMethods(rctx, args["customer"].(string), args["type"].(*model.PaymentMethodTypes))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3139,6 +3308,38 @@ func (ec *executionContext) _Query_payment_method(ctx context.Context, field gra
 	res := resTmp.(*model.PaymentMethod)
 	fc.Result = res
 	return ec.marshalOPaymentMethod2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐPaymentMethod(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_subscriptions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Subscriptions(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.StripeSubscription)
+	fc.Result = res
+	return ec.marshalOStripe_Subscription2ᚕᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐStripeSubscriptionᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3327,6 +3528,166 @@ func (ec *executionContext) _Recurring_usage_type(ctx context.Context, field gra
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.UsageType, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Stripe_Subscription_id(ctx context.Context, field graphql.CollectedField, obj *model.StripeSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Stripe_Subscription",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Stripe_Subscription_cancel_at_period_end(ctx context.Context, field graphql.CollectedField, obj *model.StripeSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Stripe_Subscription",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CancelAtPeriodEnd, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Stripe_Subscription_current_period_end(ctx context.Context, field graphql.CollectedField, obj *model.StripeSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Stripe_Subscription",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CurrentPeriodEnd, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Stripe_Subscription_current_period_start(ctx context.Context, field graphql.CollectedField, obj *model.StripeSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Stripe_Subscription",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CurrentPeriodStart, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Stripe_Subscription_status(ctx context.Context, field graphql.CollectedField, obj *model.StripeSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Stripe_Subscription",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4859,6 +5220,17 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				res = ec._Query_payment_method(ctx, field)
 				return res
 			})
+		case "subscriptions":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_subscriptions(ctx, field)
+				return res
+			})
 		case "__type":
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
@@ -4893,6 +5265,38 @@ func (ec *executionContext) _Recurring(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._Recurring_interval_count(ctx, field, obj)
 		case "usage_type":
 			out.Values[i] = ec._Recurring_usage_type(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var stripe_SubscriptionImplementors = []string{"Stripe_Subscription"}
+
+func (ec *executionContext) _Stripe_Subscription(ctx context.Context, sel ast.SelectionSet, obj *model.StripeSubscription) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, stripe_SubscriptionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Stripe_Subscription")
+		case "id":
+			out.Values[i] = ec._Stripe_Subscription_id(ctx, field, obj)
+		case "cancel_at_period_end":
+			out.Values[i] = ec._Stripe_Subscription_cancel_at_period_end(ctx, field, obj)
+		case "current_period_end":
+			out.Values[i] = ec._Stripe_Subscription_current_period_end(ctx, field, obj)
+		case "current_period_start":
+			out.Values[i] = ec._Stripe_Subscription_current_period_start(ctx, field, obj)
+		case "status":
+			out.Values[i] = ec._Stripe_Subscription_status(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5256,6 +5660,16 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNStripe_Subscription2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐStripeSubscription(ctx context.Context, sel ast.SelectionSet, v *model.StripeSubscription) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Stripe_Subscription(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -5824,6 +6238,46 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return graphql.MarshalString(*v)
 }
 
+func (ec *executionContext) marshalOStripe_Subscription2ᚕᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐStripeSubscriptionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.StripeSubscription) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNStripe_Subscription2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐStripeSubscription(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
 func (ec *executionContext) marshalOThreeDSecureUsage2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐThreeDSecureUsage(ctx context.Context, sel ast.SelectionSet, v *model.ThreeDSecureUsage) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -6003,6 +6457,22 @@ func (ec *executionContext) marshalO__Type2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 		return graphql.Null
 	}
 	return ec.___Type(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOpayment_method_types2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐPaymentMethodTypes(ctx context.Context, v interface{}) (*model.PaymentMethodTypes, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.PaymentMethodTypes)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOpayment_method_types2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐPaymentMethodTypes(ctx context.Context, sel ast.SelectionSet, v *model.PaymentMethodTypes) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 // endregion ***************************** type.gotpl *****************************
