@@ -54,6 +54,23 @@ type Invoice struct {
 	Subtotal         *int    `json:"subtotal"`
 	Tax              *string `json:"tax"`
 	Total            *int    `json:"total"`
+	Lines            *Lines  `json:"lines"`
+}
+
+type InvoiceLine struct {
+	ID          *string `json:"id"`
+	Object      *string `json:"object"`
+	Amount      *int    `json:"amount"`
+	Currency    *string `json:"currency"`
+	Description *string `json:"description"`
+	Livemode    *bool   `json:"livemode"`
+	Quantity    *int    `json:"quantity"`
+	Type        *string `json:"type"`
+}
+
+type Lines struct {
+	Object *string        `json:"object"`
+	Data   []*InvoiceLine `json:"data"`
 }
 
 type Metadata struct {

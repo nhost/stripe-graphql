@@ -79,6 +79,7 @@ type ComplexityRoot struct {
 		Customer         func(childComplexity int) int
 		HostedInvoiceURL func(childComplexity int) int
 		ID               func(childComplexity int) int
+		Lines            func(childComplexity int) int
 		Livemode         func(childComplexity int) int
 		Paid             func(childComplexity int) int
 		PeriodEnd        func(childComplexity int) int
@@ -87,6 +88,22 @@ type ComplexityRoot struct {
 		Subtotal         func(childComplexity int) int
 		Tax              func(childComplexity int) int
 		Total            func(childComplexity int) int
+	}
+
+	InvoiceLine struct {
+		Amount      func(childComplexity int) int
+		Currency    func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Livemode    func(childComplexity int) int
+		Object      func(childComplexity int) int
+		Quantity    func(childComplexity int) int
+		Type        func(childComplexity int) int
+	}
+
+	Lines struct {
+		Data   func(childComplexity int) int
+		Object func(childComplexity int) int
 	}
 
 	Metadata struct {
@@ -390,6 +407,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Invoice.ID(childComplexity), true
 
+	case "Invoice.lines":
+		if e.complexity.Invoice.Lines == nil {
+			break
+		}
+
+		return e.complexity.Invoice.Lines(childComplexity), true
+
 	case "Invoice.livemode":
 		if e.complexity.Invoice.Livemode == nil {
 			break
@@ -445,6 +469,76 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Invoice.Total(childComplexity), true
+
+	case "InvoiceLine.amount":
+		if e.complexity.InvoiceLine.Amount == nil {
+			break
+		}
+
+		return e.complexity.InvoiceLine.Amount(childComplexity), true
+
+	case "InvoiceLine.currency":
+		if e.complexity.InvoiceLine.Currency == nil {
+			break
+		}
+
+		return e.complexity.InvoiceLine.Currency(childComplexity), true
+
+	case "InvoiceLine.description":
+		if e.complexity.InvoiceLine.Description == nil {
+			break
+		}
+
+		return e.complexity.InvoiceLine.Description(childComplexity), true
+
+	case "InvoiceLine.id":
+		if e.complexity.InvoiceLine.ID == nil {
+			break
+		}
+
+		return e.complexity.InvoiceLine.ID(childComplexity), true
+
+	case "InvoiceLine.livemode":
+		if e.complexity.InvoiceLine.Livemode == nil {
+			break
+		}
+
+		return e.complexity.InvoiceLine.Livemode(childComplexity), true
+
+	case "InvoiceLine.object":
+		if e.complexity.InvoiceLine.Object == nil {
+			break
+		}
+
+		return e.complexity.InvoiceLine.Object(childComplexity), true
+
+	case "InvoiceLine.quantity":
+		if e.complexity.InvoiceLine.Quantity == nil {
+			break
+		}
+
+		return e.complexity.InvoiceLine.Quantity(childComplexity), true
+
+	case "InvoiceLine.type":
+		if e.complexity.InvoiceLine.Type == nil {
+			break
+		}
+
+		return e.complexity.InvoiceLine.Type(childComplexity), true
+
+	case "Lines.data":
+		if e.complexity.Lines.Data == nil {
+			break
+		}
+
+		return e.complexity.Lines.Data(childComplexity), true
+
+	case "Lines.object":
+		if e.complexity.Lines.Object == nil {
+			break
+		}
+
+		return e.complexity.Lines.Object(childComplexity), true
 
 	case "Metadata.order_id":
 		if e.complexity.Metadata.OrderID == nil {
@@ -1010,12 +1104,38 @@ type Invoice {
   # total_discount_amounts: [String]
   # status_transitions: StatusTransitions
   # payment_settings: PaymentSettings
-  # lines: Lines
+  lines: Lines
   # discounts: [String]
   # default_tax_rates: [String]
   # customer_tax_ids: [String]
   # customer_shipping: CustomerShipping
   # automatic_tax: AutomaticTax
+}
+
+type Lines {
+  object: String
+  data: [InvoiceLine!]
+}
+
+type InvoiceLine {
+  id: String
+  object: String
+  amount: Int
+  currency: String
+  description: String
+  # discountable: Boolean
+  # invoice_item: String
+  livemode: Boolean
+  # proration: Boolean
+  quantity: Int
+  # subscription: String
+  type: String
+  # tax_rates: [String]
+  # tax_amounts: [String]
+  # price: Price
+  # period: Period
+  # discounts: [String]
+  # discount_amounts: [String]
 }
 `, BuiltIn: false},
 	{Name: "graph/mutation.graphqls", Input: ``, BuiltIn: false},
@@ -2548,6 +2668,358 @@ func (ec *executionContext) _Invoice_total(ctx context.Context, field graphql.Co
 	res := resTmp.(*int)
 	fc.Result = res
 	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Invoice_lines(ctx context.Context, field graphql.CollectedField, obj *model.Invoice) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Invoice",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Lines, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Lines)
+	fc.Result = res
+	return ec.marshalOLines2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐLines(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvoiceLine_id(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceLine) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvoiceLine",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvoiceLine_object(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceLine) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvoiceLine",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Object, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvoiceLine_amount(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceLine) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvoiceLine",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Amount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvoiceLine_currency(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceLine) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvoiceLine",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Currency, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvoiceLine_description(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceLine) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvoiceLine",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvoiceLine_livemode(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceLine) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvoiceLine",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Livemode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvoiceLine_quantity(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceLine) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvoiceLine",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Quantity, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvoiceLine_type(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceLine) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvoiceLine",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Lines_object(ctx context.Context, field graphql.CollectedField, obj *model.Lines) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Lines",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Object, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Lines_data(ctx context.Context, field graphql.CollectedField, obj *model.Lines) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Lines",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Data, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.InvoiceLine)
+	fc.Result = res
+	return ec.marshalOInvoiceLine2ᚕᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐInvoiceLineᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Metadata_order_id(ctx context.Context, field graphql.CollectedField, obj *model.Metadata) (ret graphql.Marshaler) {
@@ -5421,6 +5893,72 @@ func (ec *executionContext) _Invoice(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Invoice_tax(ctx, field, obj)
 		case "total":
 			out.Values[i] = ec._Invoice_total(ctx, field, obj)
+		case "lines":
+			out.Values[i] = ec._Invoice_lines(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var invoiceLineImplementors = []string{"InvoiceLine"}
+
+func (ec *executionContext) _InvoiceLine(ctx context.Context, sel ast.SelectionSet, obj *model.InvoiceLine) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, invoiceLineImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("InvoiceLine")
+		case "id":
+			out.Values[i] = ec._InvoiceLine_id(ctx, field, obj)
+		case "object":
+			out.Values[i] = ec._InvoiceLine_object(ctx, field, obj)
+		case "amount":
+			out.Values[i] = ec._InvoiceLine_amount(ctx, field, obj)
+		case "currency":
+			out.Values[i] = ec._InvoiceLine_currency(ctx, field, obj)
+		case "description":
+			out.Values[i] = ec._InvoiceLine_description(ctx, field, obj)
+		case "livemode":
+			out.Values[i] = ec._InvoiceLine_livemode(ctx, field, obj)
+		case "quantity":
+			out.Values[i] = ec._InvoiceLine_quantity(ctx, field, obj)
+		case "type":
+			out.Values[i] = ec._InvoiceLine_type(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var linesImplementors = []string{"Lines"}
+
+func (ec *executionContext) _Lines(ctx context.Context, sel ast.SelectionSet, obj *model.Lines) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, linesImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Lines")
+		case "object":
+			out.Values[i] = ec._Lines_object(ctx, field, obj)
+		case "data":
+			out.Values[i] = ec._Lines_data(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6135,6 +6673,16 @@ func (ec *executionContext) marshalNInvoice2ᚖgithubᚗcomᚋnhostᚋstripeᚑg
 	return ec._Invoice(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNInvoiceLine2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐInvoiceLine(ctx context.Context, sel ast.SelectionSet, v *model.InvoiceLine) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._InvoiceLine(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNPaymentMethod2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐPaymentMethod(ctx context.Context, sel ast.SelectionSet, v *model.PaymentMethod) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -6579,6 +7127,53 @@ func (ec *executionContext) marshalOInvoice2ᚖgithubᚗcomᚋnhostᚋstripeᚑg
 		return graphql.Null
 	}
 	return ec._Invoice(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOInvoiceLine2ᚕᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐInvoiceLineᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.InvoiceLine) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNInvoiceLine2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐInvoiceLine(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalOLines2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐLines(ctx context.Context, sel ast.SelectionSet, v *model.Lines) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Lines(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOMetadata2ᚖgithubᚗcomᚋnhostᚋstripeᚑgraphqlᚋgraphᚋmodelᚐMetadata(ctx context.Context, sel ast.SelectionSet, v *model.Metadata) graphql.Marshaler {

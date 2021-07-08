@@ -120,10 +120,36 @@ type Invoice {
   # total_discount_amounts: [String]
   # status_transitions: StatusTransitions
   # payment_settings: PaymentSettings
-  # lines: Lines
+  lines: Lines
   # discounts: [String]
   # default_tax_rates: [String]
   # customer_tax_ids: [String]
   # customer_shipping: CustomerShipping
   # automatic_tax: AutomaticTax
+}
+
+type Lines {
+  object: String
+  data: [InvoiceLine!]
+}
+
+type InvoiceLine {
+  id: String
+  object: String
+  amount: Int
+  currency: String
+  description: String
+  # discountable: Boolean
+  # invoice_item: String
+  livemode: Boolean
+  # proration: Boolean
+  quantity: Int
+  # subscription: String
+  type: String
+  # tax_rates: [String]
+  # tax_amounts: [String]
+  # price: Price
+  # period: Period
+  # discounts: [String]
+  # discount_amounts: [String]
 }
