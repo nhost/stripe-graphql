@@ -21,6 +21,8 @@ type Customer {
   name: String
   # next_invoice_sequence: Int
   phone: String
+  subscription: [Stripe_Subscription!] 
+  invoices: [Invoice!]
   # shipping: String
   # tax_exempt: String
   # preferred_locales: [String]

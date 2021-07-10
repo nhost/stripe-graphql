@@ -1,1 +1,3 @@
 setenv.sh
+generated/
+model/

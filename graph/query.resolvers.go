@@ -20,6 +20,7 @@ import (
 
 func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
 	params := &stripe.CustomerListParams{}
+	params.AddExpand("data.subscriptions")
 	i := customer.List(params)
 
 	var new_customers []*model.Customer
