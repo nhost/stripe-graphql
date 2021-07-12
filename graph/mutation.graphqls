@@ -1,0 +1,18 @@
+type Mutation {
+    insert_customer(input: CustomerInput): Customer
+    update_customer(id: ID!, input: CustomerInput): Customer
+    delete_customer(id: ID!): Customer
+    # insert_subscription(): Stripe_Subscription
+    # update_subscription(): Stripe_Subscription
+    # delete_subscription(): Stripe_Subscription
+    # insert_product(): Product
+    # update_product(): Product
+    # delete_product(): Product
+}
+
+input CustomerInput {
+    name: String
+    address: String
+    description: String
+    email: String
+}

@@ -9,8 +9,10 @@ func ConvertCustomer(old_customer *stripe.Customer) *model.Customer {
 	currency := string(old_customer.Currency)
 	created := int(old_customer.Created)
 	var subscriptions []*model.StripeSubscription
-	for _, sub := range old_customer.Subscriptions.Data {
-		subscriptions = append(subscriptions, ConvertSubscription(*sub))
+	if old_customer.Subscriptions != nil {
+		for _, sub := range old_customer.Subscriptions.Data {
+			subscriptions = append(subscriptions, ConvertSubscription(*sub))
+		}
 	}
 	new_customer := &model.Customer{
 		ID:           old_customer.ID,
