@@ -2,7 +2,7 @@ type Mutation {
     insert_customer(input: CustomerInput): Customer
     update_customer(id: ID!, input: CustomerInput): Customer
     delete_customer(id: ID!): Customer
-    # insert_subscription(): Stripe_Subscription
+    insert_subscription(input: SubscriptionInput): Stripe_Subscription
     # update_subscription(): Stripe_Subscription
     # delete_subscription(): Stripe_Subscription
     # insert_product(): Product
@@ -15,4 +15,25 @@ input CustomerInput {
     address: String
     description: String
     email: String
+}
+
+input SubscriptionInput {
+    customer: ID!
+    items: [SubscriptionItemInput!]
+}
+
+input SubscriptionItemInput {
+    price: ID
+    price_data: PriceDataInput
+}
+
+input PriceDataInput {
+    currency: currency_types!
+    product: ID!
+    recurring: PriceDataRecurringInput
+}
+
+input PriceDataRecurringInput {
+    interval: recurring_interval!
+    interval_count: Int
 }

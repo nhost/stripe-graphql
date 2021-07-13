@@ -12,24 +12,3 @@ type Query {
   products: [Product!]
   product(id: ID!): Product
 }
-
-enum payment_method_types {
-  acss_debit
-  afterpay_clearpay
-  alipay
-  au_becs_debit
-  bacs_debit
-  bancontact
-  boleto
-  card
-  eps
-  fpx
-  giropay
-  grabpay
-  ideal
-  oxxo
-  p24
-  sepa_debit
-  sofort
-  wechat_pay
-}
