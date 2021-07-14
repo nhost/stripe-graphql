@@ -1,4 +1,4 @@
-package main
+package helpers
 
 import (
 	"log"
@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/nhost/stripe-graphql/graph"
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/stripe/stripe-go/v72"
@@ -14,8 +13,7 @@ import (
 
 const defaultPort = "8080"
 
-// Run go generate in /graph before running the app to load all schemas, queries, and mutations
-func main() {
+func CreateServer() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -27,11 +25,6 @@ func main() {
 	}
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
-
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
-
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
-
+	http.ListenAndServe(":"+port, nil)
 }
