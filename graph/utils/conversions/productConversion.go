@@ -1,4 +1,4 @@
-package utils
+package conversions
 
 import (
 	"github.com/nhost/stripe-graphql/graph/model"

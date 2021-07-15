@@ -8,7 +8,7 @@ import (
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
-	"github.com/nhost/stripe-graphql/graph/utils"
+	"github.com/nhost/stripe-graphql/graph/utils/conversions"
 	stripe "github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/customer"
 	"github.com/stripe/stripe-go/v72/sub"
@@ -24,7 +24,7 @@ func (r *mutationResolver) InsertCustomer(ctx context.Context, input *model.Cust
 	if err != nil {
 		return nil, err
 	}
-	return utils.ConvertCustomer(c), nil
+	return conversions.ConvertCustomer(c), nil
 }
 
 func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input *model.CustomerInput) (*model.Customer, error) {
@@ -37,7 +37,7 @@ func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input 
 	if err != nil {
 		return nil, err
 	}
-	return utils.ConvertCustomer(c), nil
+	return conversions.ConvertCustomer(c), nil
 }
 
 func (r *mutationResolver) DeleteCustomer(ctx context.Context, id string) (*model.Customer, error) {
@@ -47,7 +47,7 @@ func (r *mutationResolver) DeleteCustomer(ctx context.Context, id string) (*mode
 		return nil, err
 	}
 
-	return utils.ConvertCustomer(c), nil
+	return conversions.ConvertCustomer(c), nil
 }
 
 func (r *mutationResolver) InsertSubscription(ctx context.Context, input *model.SubscriptionInput) (*model.StripeSubscription, error) {
@@ -90,7 +90,7 @@ func (r *mutationResolver) InsertSubscription(ctx context.Context, input *model.
 		return nil, err
 	}
 
-	return utils.ConvertSubscription(*s), nil
+	return conversions.ConvertSubscription(*s), nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

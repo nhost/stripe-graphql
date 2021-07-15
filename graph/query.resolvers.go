@@ -5,10 +5,12 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
-	"github.com/nhost/stripe-graphql/graph/utils"
+	"github.com/nhost/stripe-graphql/graph/utils/constants"
+	"github.com/nhost/stripe-graphql/graph/utils/conversions"
 	stripe "github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/customer"
 	"github.com/stripe/stripe-go/v72/invoice"
@@ -19,13 +21,14 @@ import (
 )
 
 func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
+	fmt.Printf("Stripe Key from context: %v\n", ctx.Value(constants.STRIPE_MAP_KEY))
 	params := &stripe.CustomerListParams{}
 	params.AddExpand("data.subscriptions")
 	i := customer.List(params)
 
 	var new_customers []*model.Customer
 	for i.Next() {
-		new_customers = append(new_customers, utils.ConvertCustomer(i.Customer()))
+		new_customers = append(new_customers, conversions.ConvertCustomer(i.Customer()))
 	}
 
 	return new_customers, nil
@@ -39,7 +42,7 @@ func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Custom
 	}
 
 	if c != nil {
-		converted_customer := utils.ConvertCustomer(c)
+		converted_customer := conversions.ConvertCustomer(c)
 		return converted_customer, nil
 	}
 	return nil, nil
@@ -52,7 +55,7 @@ func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) 
 	var invoices []*model.Invoice
 
 	for i.Next() {
-		converted_invoice := utils.ConvertInvoice(i.Invoice())
+		converted_invoice := conversions.ConvertInvoice(i.Invoice())
 		invoices = append(invoices, converted_invoice)
 	}
 
@@ -67,7 +70,7 @@ func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice,
 	}
 
 	if i != nil {
-		converted_invoice := utils.ConvertInvoice(i)
+		converted_invoice := conversions.ConvertInvoice(i)
 		return converted_invoice, nil
 	}
 	return nil, nil
@@ -78,7 +81,7 @@ func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
 	var prices []*model.Price
 	i := price.List(params)
 	for i.Next() {
-		converted_price := utils.ConvertPrice(*i.Price())
+		converted_price := conversions.ConvertPrice(*i.Price())
 		prices = append(prices, converted_price)
 	}
 	return prices, nil
@@ -92,7 +95,7 @@ func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, err
 	}
 
 	if p != nil {
-		converted_price := utils.ConvertPrice(*p)
+		converted_price := conversions.ConvertPrice(*p)
 		return converted_price, nil
 	}
 	return nil, nil
@@ -106,7 +109,7 @@ func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typ
 	i := paymentmethod.List(params)
 	var payment_methods []*model.PaymentMethod
 	for i.Next() {
-		converted_object := utils.ConvertPaymentMethod(i.PaymentMethod())
+		converted_object := conversions.ConvertPaymentMethod(i.PaymentMethod())
 		payment_methods = append(payment_methods, converted_object)
 	}
 	return payment_methods, nil
@@ -120,7 +123,7 @@ func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.Pa
 	}
 
 	if p != nil {
-		converted_pmethod := utils.ConvertPaymentMethod(p)
+		converted_pmethod := conversions.ConvertPaymentMethod(p)
 		return converted_pmethod, nil
 	}
 
@@ -133,7 +136,7 @@ func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubsc
 
 	var subscriptions []*model.StripeSubscription
 	for i.Next() {
-		converted_object := utils.ConvertSubscription(*i.Subscription())
+		converted_object := conversions.ConvertSubscription(*i.Subscription())
 		subscriptions = append(subscriptions, converted_object)
 	}
 	return subscriptions, nil
@@ -147,7 +150,7 @@ func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.Str
 	}
 
 	if p != nil {
-		converted_sub := utils.ConvertSubscription(*p)
+		converted_sub := conversions.ConvertSubscription(*p)
 		return converted_sub, nil
 	}
 
@@ -160,7 +163,7 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 
 	var products []*model.Product
 	for i.Next() {
-		converted_product := utils.ConvertProduct(*i.Product())
+		converted_product := conversions.ConvertProduct(*i.Product())
 		products = append(products, converted_product)
 	}
 
@@ -175,7 +178,7 @@ func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product,
 	}
 
 	if p != nil {
-		converted_product := utils.ConvertProduct(*p)
+		converted_product := conversions.ConvertProduct(*p)
 		return converted_product, nil
 	}
 
