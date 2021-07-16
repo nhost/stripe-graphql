@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,7 +11,6 @@ import (
 	"github.com/nhost/stripe-graphql/graph"
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/utils"
-	"github.com/stripe/stripe-go/v72"
 )
 
 const defaultPort = "8080"
@@ -22,15 +22,11 @@ func main() {
 		port = defaultPort
 	}
 
-	stripe.Key = os.Getenv("STRIPE_KEY")
-	if stripe.Key == "" {
-		log.Fatal("No STRIPE_KEY env variable provided.")
-	}
-
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", utils.StripeKeyMiddleware(srv))
+	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	fmt.Printf("GraphQL server running on port %v\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }

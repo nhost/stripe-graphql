@@ -5,11 +5,10 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
-	"github.com/nhost/stripe-graphql/utils/constants"
+	"github.com/nhost/stripe-graphql/utils"
 	"github.com/nhost/stripe-graphql/utils/conversions"
 	stripe "github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/customer"
@@ -21,10 +20,20 @@ import (
 )
 
 func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
-	fmt.Printf("Stripe Key from context: %v\n", ctx.Value(constants.STRIPE_MAP_KEY))
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	params := &stripe.CustomerListParams{}
 	params.AddExpand("data.subscriptions")
-	i := customer.List(params)
+	i := client.Customers.List(params)
+
+	if i.Err() != nil {
+		return nil, i.Err()
+	}
 
 	var new_customers []*model.Customer
 	for i.Next() {
@@ -35,6 +44,7 @@ func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error
 }
 
 func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Customer, error) {
+
 	c, err := customer.Get(*id, nil)
 
 	if err != nil {
