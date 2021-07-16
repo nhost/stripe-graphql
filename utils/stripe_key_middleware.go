@@ -7,6 +7,8 @@ import (
 	"github.com/nhost/stripe-graphql/utils/constants"
 )
 
+// Gets stripe key from http header, initializes client, and puts it in request context
+// So query and mutation resolvers can easily access client
 func StripeKeyMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		// not all graphql requests (eg. getting the schema) use the Stripe Key, so still

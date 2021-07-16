@@ -8,19 +8,25 @@ import (
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
+	"github.com/nhost/stripe-graphql/utils"
 	"github.com/nhost/stripe-graphql/utils/conversions"
 	stripe "github.com/stripe/stripe-go/v72"
-	"github.com/stripe/stripe-go/v72/customer"
-	"github.com/stripe/stripe-go/v72/sub"
 )
 
 func (r *mutationResolver) InsertCustomer(ctx context.Context, input *model.CustomerInput) (*model.Customer, error) {
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	params := &stripe.CustomerParams{
 		Name:        input.Name,
 		Description: input.Description,
 		Email:       input.Email,
 	}
-	c, err := customer.New(params)
+	c, err := client.Customers.New(params)
 	if err != nil {
 		return nil, err
 	}
@@ -28,12 +34,19 @@ func (r *mutationResolver) InsertCustomer(ctx context.Context, input *model.Cust
 }
 
 func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input *model.CustomerInput) (*model.Customer, error) {
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	params := &stripe.CustomerParams{
 		Name:        input.Name,
 		Description: input.Description,
 		Email:       input.Email,
 	}
-	c, err := customer.Update(id, params)
+	c, err := client.Customers.Update(id, params)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +54,14 @@ func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input 
 }
 
 func (r *mutationResolver) DeleteCustomer(ctx context.Context, id string) (*model.Customer, error) {
-	c, err := customer.Del(id, nil)
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := client.Customers.Del(id, nil)
 
 	if err != nil {
 		return nil, err
@@ -51,6 +71,13 @@ func (r *mutationResolver) DeleteCustomer(ctx context.Context, id string) (*mode
 }
 
 func (r *mutationResolver) InsertSubscription(ctx context.Context, input *model.SubscriptionInput) (*model.StripeSubscription, error) {
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	var items []*stripe.SubscriptionItemsParams
 
 	for _, item := range input.Items {
@@ -84,7 +111,7 @@ func (r *mutationResolver) InsertSubscription(ctx context.Context, input *model.
 		Items:    items,
 	}
 
-	s, err := sub.New(params)
+	s, err := client.Subscriptions.New(params)
 
 	if err != nil {
 		return nil, err
