@@ -15,6 +15,9 @@ import (
 	"github.com/nhost/stripe-graphql/utils/constants"
 )
 
+const addErrorPrefix = "Error adding stripe customer: "
+const deleteErrorPrefix = "Error deleting stripe customer: "
+
 // Run go generate in /graph to load the methods that are being tested
 func TestAddAndDeleteCustomer(t *testing.T) {
 	go server.CreateServer()
@@ -65,7 +68,7 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 	err = client.Run(ctx, req, &m)
 
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("%v%v", addErrorPrefix, err)
 	}
 
 	new_customer, ok := m["insert_customer"].(map[string]interface{})
@@ -73,7 +76,7 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 	new_id := fmt.Sprint(new_customer["id"])
 
 	if ok == false {
-		t.Fatal("incorrect graphql response")
+		t.Fatalf("%vincorrect graphql response", addErrorPrefix)
 	}
 
 	t.Logf("New customer created. ID: %v, Email: %v Name: %v", new_customer["id"], new_customer["email"], new_customer["name"])
@@ -99,7 +102,7 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 		err = client.Run(context.Background(), req, nil)
 
 		if err != nil {
-			t.Fatal(err)
+			t.Fatalf("%v%v", deleteErrorPrefix, err)
 		}
 	})
 }
