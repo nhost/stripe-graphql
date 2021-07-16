@@ -11,12 +11,14 @@ import (
 
 	"github.com/joho/godotenv"
 	graphql "github.com/machinebox/graphql"
-	"github.com/nhost/stripe-graphql/tests/helpers"
+	"github.com/nhost/stripe-graphql/server"
 	"github.com/nhost/stripe-graphql/utils/constants"
 )
 
 // Run go generate in /graph to load the methods that are being tested
 func TestAddAndDeleteCustomer(t *testing.T) {
+	go server.CreateServer()
+
 	err := godotenv.Load("testing.env")
 
 	if err != nil {
@@ -24,8 +26,6 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 	}
 
 	stripe_key := os.Getenv("STRIPE_KEY")
-
-	go helpers.CreateServer()
 
 	// Setup
 	rand.Seed(time.Now().UnixNano())
@@ -39,20 +39,15 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 
 	t.Log("Creating new customer.")
 
-	var m struct {
-		InsertCustomer struct {
-			ID    string
-			Email string
-			Name  string
-		}
-	}
+	// Variable for New customer
+	var m map[string]interface{}
 
 	req := graphql.NewRequest(`
 		mutation ($customer: CustomerInput) {
 			insert_customer(input: $customer) {
 			  id
 			  name
-			  balance
+			  email
 			  created
 			}
 	  }
@@ -67,38 +62,44 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 	req.Var("customer", customer)
 	req.Header.Set(constants.STRIPE_KEY_HEADER, stripe_key)
 
-	t.Log(req.Header)
-
 	err = client.Run(ctx, req, &m)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	// new_id := &m.InsertCustomer.ID
+	new_customer, ok := m["insert_customer"].(map[string]interface{})
 
-	t.Logf("New customer created. ID: %v, Email: %v Name: %v", m.InsertCustomer.ID, m.InsertCustomer.Email, m.InsertCustomer.Name)
+	new_id := fmt.Sprint(new_customer["id"])
+
+	if ok == false {
+		t.Fatal("incorrect graphql response")
+	}
+
+	t.Logf("New customer created. ID: %v, Email: %v Name: %v", new_customer["id"], new_customer["email"], new_customer["name"])
 
 	// Deleting new Customer - Checks if customer was successfully added and provides cleanup
 	// Also tests Delete Customer mutation
-	// t.Cleanup(func() {
-	// 	var d struct {
-	// 		DeletedCustomer struct {
-	// 			ID    string
-	// 			Email string
-	// 		} `graphql:"delete_customer(id: $id)"`
-	// 	}
+	t.Cleanup(func() {
 
-	// 	variables = map[string]interface{}{
-	// 		"id": *new_id,
-	// 	}
+		req := graphql.NewRequest(`
+		mutation ($id: ID!) {
+			delete_customer(id: $id) {
+			  id
+			  email
+			}
+	  	}
+		`)
 
-	// 	t.Logf("Deleting customer with ID: %v", m.InsertCustomer.ID)
+		req.Var("id", new_id)
+		req.Header.Set(constants.STRIPE_KEY_HEADER, stripe_key)
 
-	// 	err = client.Mutate(context.Background(), &d, variables)
+		t.Logf("Deleting customer with ID: %v", new_id)
 
-	// 	if err != nil {
-	// 		t.Fatal(err)
-	// 	}
-	// })
+		err = client.Run(context.Background(), req, nil)
+
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
 }

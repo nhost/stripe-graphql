@@ -15,3 +15,5 @@ const (
 )
 
 var STRIPE_CLIENT_CONTEXT_INVALID string = fmt.Sprintf("key %v in context had invalid value, needs stripe *client.API", STRIPE_CLIENT_KEY)
+
+const DEFAULT_PORT = "8080"
