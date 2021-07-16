@@ -45,7 +45,7 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 	err := client.Mutate(context.Background(), &m, variables)
 
 	if err != nil {
-		t.Error(err.Error())
+		t.Error(err)
 	}
 
 	new_id := &m.InsertCustomer.ID

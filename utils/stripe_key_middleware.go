@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/nhost/stripe-graphql/graph/utils/constants"
+	"github.com/nhost/stripe-graphql/utils/constants"
 )
 
 func StripeKeyMiddleware(next http.Handler) http.Handler {

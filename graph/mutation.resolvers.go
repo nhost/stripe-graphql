@@ -8,7 +8,7 @@ import (
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
-	"github.com/nhost/stripe-graphql/graph/utils/conversions"
+	"github.com/nhost/stripe-graphql/utils/conversions"
 	stripe "github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/customer"
 	"github.com/stripe/stripe-go/v72/sub"
