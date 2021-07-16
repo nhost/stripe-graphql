@@ -11,12 +11,6 @@ import (
 	"github.com/nhost/stripe-graphql/utils"
 	"github.com/nhost/stripe-graphql/utils/conversions"
 	stripe "github.com/stripe/stripe-go/v72"
-	"github.com/stripe/stripe-go/v72/customer"
-	"github.com/stripe/stripe-go/v72/invoice"
-	"github.com/stripe/stripe-go/v72/paymentmethod"
-	"github.com/stripe/stripe-go/v72/price"
-	"github.com/stripe/stripe-go/v72/product"
-	"github.com/stripe/stripe-go/v72/sub"
 )
 
 func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
@@ -45,7 +39,13 @@ func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error
 
 func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Customer, error) {
 
-	c, err := customer.Get(*id, nil)
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := client.Customers.Get(*id, nil)
 
 	if err != nil {
 		return nil, err
@@ -59,8 +59,15 @@ func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Custom
 }
 
 func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) {
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	params := &stripe.InvoiceListParams{}
-	i := invoice.List(params)
+	i := client.Invoices.List(params)
 
 	var invoices []*model.Invoice
 
@@ -73,7 +80,14 @@ func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) 
 }
 
 func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice, error) {
-	i, err := invoice.Get(id, nil)
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	i, err := client.Invoices.Get(id, nil)
 
 	if err != nil {
 		return nil, err
@@ -87,9 +101,16 @@ func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice,
 }
 
 func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	params := &stripe.PriceListParams{}
 	var prices []*model.Price
-	i := price.List(params)
+	i := client.Prices.List(params)
 	for i.Next() {
 		converted_price := conversions.ConvertPrice(*i.Price())
 		prices = append(prices, converted_price)
@@ -98,7 +119,14 @@ func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
 }
 
 func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, error) {
-	p, err := price.Get(id, nil)
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	p, err := client.Prices.Get(id, nil)
 
 	if err != nil {
 		return nil, err
@@ -112,11 +140,18 @@ func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, err
 }
 
 func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typeArg *model.PaymentMethodTypes) ([]*model.PaymentMethod, error) {
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	params := &stripe.PaymentMethodListParams{
 		Customer: &customer,
 		Type:     (*string)(typeArg),
 	}
-	i := paymentmethod.List(params)
+	i := client.PaymentMethods.List(params)
 	var payment_methods []*model.PaymentMethod
 	for i.Next() {
 		converted_object := conversions.ConvertPaymentMethod(i.PaymentMethod())
@@ -126,7 +161,14 @@ func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typ
 }
 
 func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.PaymentMethod, error) {
-	p, err := paymentmethod.Get(id, nil)
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	p, err := client.PaymentMethods.Get(id, nil)
 
 	if err != nil {
 		return nil, err
@@ -141,8 +183,15 @@ func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.Pa
 }
 
 func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubscription, error) {
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	params := &stripe.SubscriptionListParams{}
-	i := sub.List(params)
+	i := client.Subscriptions.List(params)
 
 	var subscriptions []*model.StripeSubscription
 	for i.Next() {
@@ -153,7 +202,14 @@ func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubsc
 }
 
 func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.StripeSubscription, error) {
-	p, err := sub.Get(id, nil)
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	p, err := client.Subscriptions.Get(id, nil)
 
 	if err != nil {
 		return nil, err
@@ -168,8 +224,15 @@ func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.Str
 }
 
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	params := stripe.ProductListParams{}
-	i := product.List(&params)
+	i := client.Products.List(&params)
 
 	var products []*model.Product
 	for i.Next() {
@@ -181,7 +244,14 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 }
 
 func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
-	p, err := product.Get(id, nil)
+
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	p, err := client.Products.Get(id, nil)
 
 	if err != nil {
 		return nil, err
