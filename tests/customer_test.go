@@ -25,7 +25,7 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 	err := godotenv.Load("testing.env")
 
 	if err != nil {
-		t.Fatal("Error loading .env file")
+		t.Fatal("Error loading testing.env file")
 	}
 
 	stripe_key := os.Getenv("STRIPE_KEY")

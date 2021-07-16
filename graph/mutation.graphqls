@@ -4,7 +4,7 @@ type Mutation {
     delete_customer(id: ID!): Customer
     insert_subscription(input: SubscriptionInput): Stripe_Subscription
     # update_subscription(): Stripe_Subscription
-    # delete_subscription(): Stripe_Subscription
+    cancel_subscription(id: ID!): Stripe_Subscription
     # insert_product(): Product
     # update_product(): Product
     # delete_product(): Product

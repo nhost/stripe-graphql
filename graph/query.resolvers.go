@@ -14,7 +14,6 @@ import (
 )
 
 func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -38,7 +37,6 @@ func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error
 }
 
 func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Customer, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -59,7 +57,6 @@ func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Custom
 }
 
 func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -80,7 +77,6 @@ func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) 
 }
 
 func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -101,7 +97,6 @@ func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice,
 }
 
 func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -119,7 +114,6 @@ func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
 }
 
 func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -140,7 +134,6 @@ func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, err
 }
 
 func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typeArg *model.PaymentMethodTypes) ([]*model.PaymentMethod, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -161,7 +154,6 @@ func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typ
 }
 
 func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.PaymentMethod, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -183,7 +175,6 @@ func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.Pa
 }
 
 func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubscription, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -202,7 +193,6 @@ func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubsc
 }
 
 func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.StripeSubscription, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -224,7 +214,6 @@ func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.Str
 }
 
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -244,7 +233,6 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 }
 
 func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
-
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
