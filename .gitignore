@@ -1,3 +1,5 @@
 setenv.sh
 generated/
 model/
+
+*.env

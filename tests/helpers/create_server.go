@@ -21,7 +21,7 @@ func CreateServer() {
 
 	stripe.Key = os.Getenv("STRIPE_KEY")
 	if stripe.Key == "" {
-		log.Fatal("No STRIPE_KEY env variable provided.")
+		log.Fatal("No STRIPE_KEY env variable provided for testing.")
 	}
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
