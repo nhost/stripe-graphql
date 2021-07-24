@@ -42,3 +42,11 @@ docker run -d -p 8080:8080 -t stripe-graphql
 ```bash
 go run main.go
 ```
+
+After running the application you can test out GraphQL API with your favorite GraphQL client. *You must specify your Stripe Secret key as an http header:*
+
+```HTTP
+"X-Stripe-Secret-Key": "YOUR_STRIPE_KEY"
+```
+
+To get your Stripe secret key, go to [Stripe](https://stripe.com) and log in to your account. Then copy your secret key from the dashboard.
