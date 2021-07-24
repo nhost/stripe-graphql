@@ -13,11 +13,32 @@ An open-source Stripe GraphQL integration with Nhost. Add Stripe to your app wit
 
 GraphQL Schema documentation coming soon!
 
-## Usage
-
-The easiest way to use this is with Nhost's managed application platform.
+## Usage with Nhost
 
 ## Local Usage
 
-1. Clone this repo
-2. Export the variable
+```bash
+git clone https://github.com/nhost/stripe-graphql.git
+cd stripe-graphql
+```
+
+After cloning the repo and going to the project directory, run the following command to generate models and logic from the GraphQL Schemas:
+
+```bash 
+go generate ./graph
+```
+
+Now we can run the application either with Docker or the go cli tool.
+
+#### Docker
+
+```bash
+docker build -t stripe-graphql .
+docker run -d -p 8080:8080 -t stripe-graphql
+```
+
+#### Go
+
+```bash
+go run main.go
+```
