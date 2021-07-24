@@ -1,6 +1,6 @@
 <p align="center">
   <p>
-    <img src="https://github.com/nhost/stripe-graphql/blob/main/logo.png" height="84">
+    <img src="https://github.com/nhost/stripe-graphql/blob/master/logo.png" height="84">
   </p>
 </p>
 
