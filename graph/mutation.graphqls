@@ -1,9 +1,9 @@
 type Mutation {
-    insert_customer(input: CustomerInput): Customer
-    update_customer(id: ID!, input: CustomerInput): Customer
+    insert_customer(input: CustomerInput!): Customer
+    update_customer(id: ID!, input: CustomerInput!): Customer
     delete_customer(id: ID!): Customer
-    insert_subscription(input: SubscriptionInput): Stripe_Subscription
-    # update_subscription(): Stripe_Subscription
+    insert_subscription(input: SubscriptionInput!): Stripe_Subscription
+    update_subscription(id: ID!, input: SubscriptionInput!): Stripe_Subscription
     cancel_subscription(id: ID!): Stripe_Subscription
     # insert_product(): Product
     # update_product(): Product

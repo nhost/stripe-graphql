@@ -5,6 +5,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
@@ -13,7 +14,7 @@ import (
 	stripe "github.com/stripe/stripe-go/v72"
 )
 
-func (r *mutationResolver) InsertCustomer(ctx context.Context, input *model.CustomerInput) (*model.Customer, error) {
+func (r *mutationResolver) InsertCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -32,7 +33,7 @@ func (r *mutationResolver) InsertCustomer(ctx context.Context, input *model.Cust
 	return conversions.ConvertCustomer(c), nil
 }
 
-func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input *model.CustomerInput) (*model.Customer, error) {
+func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input model.CustomerInput) (*model.Customer, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -67,7 +68,7 @@ func (r *mutationResolver) DeleteCustomer(ctx context.Context, id string) (*mode
 	return conversions.ConvertCustomer(c), nil
 }
 
-func (r *mutationResolver) InsertSubscription(ctx context.Context, input *model.SubscriptionInput) (*model.StripeSubscription, error) {
+func (r *mutationResolver) InsertSubscription(ctx context.Context, input model.SubscriptionInput) (*model.StripeSubscription, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -114,6 +115,10 @@ func (r *mutationResolver) InsertSubscription(ctx context.Context, input *model.
 	}
 
 	return conversions.ConvertSubscription(*s), nil
+}
+
+func (r *mutationResolver) UpdateSubscription(ctx context.Context, id string, input model.SubscriptionInput) (*model.StripeSubscription, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CancelSubscription(ctx context.Context, id string) (*model.StripeSubscription, error) {
