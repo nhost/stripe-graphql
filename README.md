@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">Stripe GraphQL</h1>
   <p align="center">
-    <img src="https://github.com/nhost/stripe-graphql/blob/master/logo.png" height="84">
+    <img src="https://github.com/nhost/stripe-graphql/blob/master/logo.png" height="150">
   </p>
 </p>
 
