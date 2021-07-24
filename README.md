@@ -2,10 +2,8 @@
   <p align="center">
     <img src="https://github.com/nhost/stripe-graphql/blob/master/logo.png" height="84">
   </p>
+  <h1 align="center">Stripe GraphQL</h1>
 </p>
-
-
-# Stripe GraphQL
 
 An open-source Stripe GraphQL integration with Nhost. Add Stripe to your app with just a couple clicks, and
 
