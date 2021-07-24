@@ -1,5 +1,5 @@
 <p align="center">
-  <p>
+  <p align="center">
     <img src="https://github.com/nhost/stripe-graphql/blob/master/logo.png" height="84">
   </p>
 </p>
