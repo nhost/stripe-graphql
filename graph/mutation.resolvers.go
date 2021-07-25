@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
@@ -78,28 +77,7 @@ func (r *mutationResolver) InsertSubscription(ctx context.Context, input model.S
 	var items []*stripe.SubscriptionItemsParams
 
 	for _, item := range input.Items {
-		var price_data_params *stripe.SubscriptionItemPriceDataParams
-
-		if item.PriceData != nil {
-			interval_count := int64(*item.PriceData.Recurring.IntervalCount)
-			var recurring_params *stripe.SubscriptionItemPriceDataRecurringParams
-			if item.PriceData.Recurring != nil {
-				recurring_params = &stripe.SubscriptionItemPriceDataRecurringParams{
-					Interval:      (*string)(&item.PriceData.Recurring.Interval),
-					IntervalCount: &interval_count,
-				}
-			}
-			price_data_params = &stripe.SubscriptionItemPriceDataParams{
-				Currency:  (*string)(&item.PriceData.Currency),
-				Product:   &item.PriceData.Product,
-				Recurring: recurring_params,
-			}
-		}
-
-		stripe_params := &stripe.SubscriptionItemsParams{
-			Price:     item.Price,
-			PriceData: price_data_params,
-		}
+		stripe_params := conversions.ConvertToSubscriptionItemsParams(item)
 		items = append(items, stripe_params)
 	}
 
@@ -114,11 +92,35 @@ func (r *mutationResolver) InsertSubscription(ctx context.Context, input model.S
 		return nil, err
 	}
 
-	return conversions.ConvertSubscription(*s), nil
+	return conversions.ConvertSubscription(s), nil
 }
 
 func (r *mutationResolver) UpdateSubscription(ctx context.Context, id string, input model.SubscriptionInput) (*model.StripeSubscription, error) {
-	panic(fmt.Errorf("not implemented"))
+	client, err := utils.GetClientFromContext(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var items []*stripe.SubscriptionItemsParams
+
+	for _, item := range input.Items {
+		stripe_params := conversions.ConvertToSubscriptionItemsParams(item)
+		items = append(items, stripe_params)
+	}
+
+	params := &stripe.SubscriptionParams{
+		Customer: &input.Customer,
+		Items:    items,
+	}
+
+	s, err := client.Subscriptions.Update(id, params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return conversions.ConvertSubscription(s), nil
 }
 
 func (r *mutationResolver) CancelSubscription(ctx context.Context, id string) (*model.StripeSubscription, error) {
@@ -134,7 +136,7 @@ func (r *mutationResolver) CancelSubscription(ctx context.Context, id string) (*
 		return nil, err
 	}
 
-	return conversions.ConvertSubscription(*s), nil
+	return conversions.ConvertSubscription(s), nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

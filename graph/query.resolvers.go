@@ -186,7 +186,7 @@ func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubsc
 
 	var subscriptions []*model.StripeSubscription
 	for i.Next() {
-		converted_object := conversions.ConvertSubscription(*i.Subscription())
+		converted_object := conversions.ConvertSubscription(i.Subscription())
 		subscriptions = append(subscriptions, converted_object)
 	}
 	return subscriptions, nil
@@ -206,7 +206,7 @@ func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.Str
 	}
 
 	if p != nil {
-		converted_sub := conversions.ConvertSubscription(*p)
+		converted_sub := conversions.ConvertSubscription(p)
 		return converted_sub, nil
 	}
 
@@ -225,7 +225,7 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 
 	var products []*model.Product
 	for i.Next() {
-		converted_product := conversions.ConvertProduct(*i.Product())
+		converted_product := conversions.ConvertProduct(i.Product())
 		products = append(products, converted_product)
 	}
 
@@ -246,7 +246,7 @@ func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product,
 	}
 
 	if p != nil {
-		converted_product := conversions.ConvertProduct(*p)
+		converted_product := conversions.ConvertProduct(p)
 		return converted_product, nil
 	}
 

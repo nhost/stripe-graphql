@@ -12,7 +12,7 @@ func ConvertCustomer(old_customer *stripe.Customer) *model.Customer {
 	var subscriptions []*model.StripeSubscription
 	if old_customer.Subscriptions != nil {
 		for _, sub := range old_customer.Subscriptions.Data {
-			subscriptions = append(subscriptions, ConvertSubscription(*sub))
+			subscriptions = append(subscriptions, ConvertSubscription(sub))
 		}
 	}
 	new_customer := &model.Customer{
