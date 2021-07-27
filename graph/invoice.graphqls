@@ -62,19 +62,19 @@
 # type AutomaticTax { enabled: Boolean status: String }
 
 type Invoice {
-  id: String
-  created: Int
-  currency: currency_types
+  id: String!
+  created: Int!
+  currency: currency_types!
   customer: Customer
-  hosted_invoice_url: String
-  livemode: Boolean
-  paid: Boolean
-  period_end: Int
-  period_start: Int
-  status: String
-  subtotal: Int
-  tax: Int
-  total: Int
+  hosted_invoice_url: String!
+  livemode: Boolean!
+  paid: Boolean!
+  period_end: Int!
+  period_start: Int!
+  status: String!
+  subtotal: Int!
+  tax: Int!
+  total: Int!
   lines: Lines
 }
 
@@ -84,12 +84,12 @@ type Lines {
 }
 
 type InvoiceLine {
-  id: String
-  object: String
-  amount: Int
-  currency: String
-  description: String
-  livemode: Boolean
-  quantity: Int
-  type: String
+  id: String!
+  object: String!
+  amount: Int!
+  currency: String!
+  description: String!
+  livemode: Boolean!
+  quantity: Int!
+  type: String!
 }

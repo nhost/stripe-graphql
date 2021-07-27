@@ -37,19 +37,19 @@ func ConvertInvoice(old_invoice *stripe.Invoice) *model.Invoice {
 	}
 
 	new_invoice := &model.Invoice{
-		ID:               &old_invoice.ID,
-		Currency:         &currency,
-		Created:          &created,
+		ID:               old_invoice.ID,
+		Currency:         currency,
+		Created:          created,
 		Customer:         c,
-		Livemode:         &old_invoice.Livemode,
+		Livemode:         old_invoice.Livemode,
 		Lines:            line_object,
-		HostedInvoiceURL: &old_invoice.HostedInvoiceURL,
-		Paid:             &old_invoice.Paid,
-		PeriodEnd:        &period_end,
-		PeriodStart:      &period_start,
-		Status:           (*string)(&old_invoice.Status),
-		Tax:              &tax,
-		Total:            &total,
+		HostedInvoiceURL: old_invoice.HostedInvoiceURL,
+		Paid:             old_invoice.Paid,
+		PeriodEnd:        period_end,
+		PeriodStart:      period_start,
+		Status:           (string)(old_invoice.Status),
+		Tax:              tax,
+		Total:            total,
 	}
 
 	return new_invoice
@@ -60,14 +60,14 @@ func ConvertInvoiceLine(old_line *stripe.InvoiceLine) *model.InvoiceLine {
 	amount := int(old_line.Amount)
 	quantity := int(old_line.Quantity)
 	new := &model.InvoiceLine{
-		ID:          &old_line.ID,
-		Amount:      &amount,
-		Currency:    &currency,
-		Object:      &old_line.Object,
-		Description: &old_line.Description,
-		Livemode:    &old_line.Livemode,
-		Quantity:    &quantity,
-		Type:        (*string)(&old_line.Type),
+		ID:          old_line.ID,
+		Amount:      amount,
+		Currency:    currency,
+		Object:      old_line.Object,
+		Description: old_line.Description,
+		Livemode:    old_line.Livemode,
+		Quantity:    quantity,
+		Type:        (string)(old_line.Type),
 	}
 
 	return new
