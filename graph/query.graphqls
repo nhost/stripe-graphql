@@ -5,7 +5,7 @@ type Query {
   invoice(id: ID!): Invoice
   prices: [Price!]
   price(id: ID!): Price
-  payment_methods(customer: ID!, type: payment_method_types): [PaymentMethod!]
+  payment_methods(customer: ID!, type: payment_method_types!): [PaymentMethod!]
   payment_method(id: ID!): PaymentMethod
   subscriptions: [Stripe_Subscription!]
   subscription(id: ID!): Stripe_Subscription

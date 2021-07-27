@@ -51,3 +51,10 @@ enum recurring_interval {
     month
     year
 }
+
+enum funding_type {
+  credit
+  debit
+  unknown
+  prepaid
+}

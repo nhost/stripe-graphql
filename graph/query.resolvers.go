@@ -134,7 +134,7 @@ func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, err
 	return nil, nil
 }
 
-func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typeArg *model.PaymentMethodTypes) ([]*model.PaymentMethod, error) {
+func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typeArg model.PaymentMethodTypes) ([]*model.PaymentMethod, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -143,7 +143,7 @@ func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typ
 
 	params := &stripe.PaymentMethodListParams{
 		Customer: &customer,
-		Type:     (*string)(typeArg),
+		Type:     (*string)(&typeArg),
 	}
 	i := client.PaymentMethods.List(params)
 	var payment_methods []*model.PaymentMethod
