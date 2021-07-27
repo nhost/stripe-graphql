@@ -108,7 +108,7 @@ func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
 	var prices []*model.Price
 	i := client.Prices.List(params)
 	for i.Next() {
-		converted_price := conversions.ConvertPrice(*i.Price())
+		converted_price := conversions.ConvertPrice(i.Price())
 		prices = append(prices, converted_price)
 	}
 	return prices, nil
@@ -128,7 +128,7 @@ func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, err
 	}
 
 	if p != nil {
-		converted_price := conversions.ConvertPrice(*p)
+		converted_price := conversions.ConvertPrice(p)
 		return converted_price, nil
 	}
 	return nil, nil

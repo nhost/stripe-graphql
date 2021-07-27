@@ -58,3 +58,15 @@ enum funding_type {
   unknown
   prepaid
 }
+
+enum price_recurring_aggregate_usage {
+  sum
+  last_during_period
+  last_ever
+  max
+}
+
+enum price_recurring_usage_type {
+  metered
+  licensed
+}
