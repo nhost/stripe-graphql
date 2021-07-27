@@ -67,7 +67,7 @@ func (r *mutationResolver) DeleteCustomer(ctx context.Context, id string) (*mode
 	return conversions.ConvertCustomer(c), nil
 }
 
-func (r *mutationResolver) InsertSubscription(ctx context.Context, input model.SubscriptionInput) (*model.StripeSubscription, error) {
+func (r *mutationResolver) InsertSubscription(ctx context.Context, input model.CreateSubscriptionInput) (*model.StripeSubscription, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -95,7 +95,7 @@ func (r *mutationResolver) InsertSubscription(ctx context.Context, input model.S
 	return conversions.ConvertSubscription(s), nil
 }
 
-func (r *mutationResolver) UpdateSubscription(ctx context.Context, id string, input model.SubscriptionInput) (*model.StripeSubscription, error) {
+func (r *mutationResolver) UpdateSubscription(ctx context.Context, id string, input model.UpdateSubscriptionInput) (*model.StripeSubscription, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {

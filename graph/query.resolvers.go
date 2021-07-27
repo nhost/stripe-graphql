@@ -64,6 +64,7 @@ func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) 
 	}
 
 	params := &stripe.InvoiceListParams{}
+	params.AddExpand("data.customer")
 	i := client.Invoices.List(params)
 
 	var invoices []*model.Invoice
