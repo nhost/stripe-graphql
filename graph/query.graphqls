@@ -1,14 +1,14 @@
 type Query {
   customers: [Customer!]
-  customer(id: ID): Customer
+  customer(id: String): Customer
   invoices: [Invoice!]
-  invoice(id: ID!): Invoice
+  invoice(id: String!): Invoice
   prices: [Price!]
-  price(id: ID!): Price
-  payment_methods(customer: ID!, type: payment_method_types!): [PaymentMethod!]
-  payment_method(id: ID!): PaymentMethod
+  price(id: String!): Price
+  payment_methods(customer: String!, type: payment_method_types!): [PaymentMethod!]
+  payment_method(id: String!): PaymentMethod
   subscriptions: [Stripe_Subscription!]
-  subscription(id: ID!): Stripe_Subscription
+  subscription(id: String!): Stripe_Subscription
   products: [Product!]
-  product(id: ID!): Product
+  product(id: String!): Product
 }

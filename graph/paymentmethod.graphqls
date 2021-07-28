@@ -8,7 +8,7 @@ type Card {
 }
 
 type PaymentMethod {
-  id: ID!
+  id: String!
   object: String!
   created: Int!
   customer: Customer
