@@ -1,13 +1,13 @@
 type Customer {
   id: String!
-  address: Address
-  balance: Int
-  created: Int
-  currency: String
-  email: String
-  livemode: Boolean
-  name: String
-  phone: String
+  address: Address!
+  balance: Int!
+  created: Int!
+  currency: String!
+  email: String!
+  livemode: Boolean!
+  name: String!
+  phone: String!
   subscription: [Stripe_Subscription!] 
   invoices: [Invoice!]
 }

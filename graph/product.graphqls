@@ -1,17 +1,9 @@
 type Product {
-  id: String
-#   object: String
-  active: Boolean
-  created: Int
-  description: String
-  livemode: Boolean
-  name: String
-#   package_dimensions: String
-#   shippable: String
-#   statement_descriptor: String
-#   tax_code: String
-#   unit_label: String
-#   updated: Int
-#   url: String
-#   images: [String]
+  id: String!
+  object: String!
+  active: Boolean!
+  created: Int!
+  description: String!
+  livemode: Boolean!
+  name: String!
 }

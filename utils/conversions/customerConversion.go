@@ -17,13 +17,13 @@ func ConvertCustomer(old_customer *stripe.Customer) *model.Customer {
 	}
 	new_customer := &model.Customer{
 		ID:           old_customer.ID,
-		Name:         &old_customer.Name,
-		Email:        &old_customer.Email,
+		Name:         old_customer.Name,
+		Email:        old_customer.Email,
 		Address:      address,
-		Phone:        &old_customer.Phone,
-		Currency:     &currency,
-		Created:      &created,
-		Livemode:     &old_customer.Livemode,
+		Phone:        old_customer.Phone,
+		Currency:     currency,
+		Created:      created,
+		Livemode:     old_customer.Livemode,
 		Subscription: subscriptions,
 	}
 
