@@ -21,49 +21,26 @@
 # }
 
 type Stripe_Subscription {
-  id: String
-  #   object: String
-  #   application_fee_percent: String
-  #   billing_cycle_anchor: Int
-  #   billing_thresholds: String
-  #   cancel_at: String
-  cancel_at_period_end: Boolean
-  #   canceled_at: String
-  #   collection_method: String
-  #   created: Int
-  current_period_end: Int
-  current_period_start: Int
-  #   customer: String
-  #   days_until_due: String
-  #   default_payment_method: String
-  #   default_source: String
-  #   discount: String
-  #   ended_at: String
-  #   latest_invoice: String
-  #   livemode: Boolean
-  #   next_pending_invoice_item_invoice: String
-  #   pause_collection: String
-  #   pending_invoice_item_interval: String
-  #   pending_setup_intent: String
-  #   pending_update: String
-  #   schedule: String
-  #   start_date: Int
-  status: String
-  #   transfer_data: String
-  #   trial_end: String
-  #   trial_start: String
+  id: String!
+  cancel_at_period_end: Boolean!
+  cancel_at: Int!
+  canceled_at: Int!
+  created: Int!
+  current_period_end: Int!
+  current_period_start: Int!
+  customer: Customer
+  days_until_due: Int!
+  default_payment_method: PaymentMethod
+  ended_at: Int!
+  livemode: Boolean!
+  status: String!
+  trial_end: Int!
+  trial_start: Int!
   items: [SubscriptionItem!]
-  #   default_tax_rates: [String]
-  #   automatic_tax: AutomaticTax
 }
 
 type SubscriptionItem {
-  id: String
-  object: String
-  billing_thresholds: String
-  created: Int
-  quantity: Int
-  subscription: String
-  tax_rates: [String]
+  id: String!
+  quantity: Int!
   price: Price
 }

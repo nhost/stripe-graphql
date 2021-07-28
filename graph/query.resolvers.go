@@ -43,7 +43,9 @@ func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Custom
 		return nil, err
 	}
 
-	c, err := client.Customers.Get(*id, nil)
+	params := &stripe.CustomerParams{}
+	params.AddExpand("subscriptions")
+	c, err := client.Customers.Get(*id, params)
 
 	if err != nil {
 		return nil, err
@@ -84,6 +86,8 @@ func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice,
 		return nil, err
 	}
 
+	params := &stripe.InvoiceParams{}
+	params.AddExpand("customer")
 	i, err := client.Invoices.Get(id, nil)
 
 	if err != nil {
@@ -107,6 +111,7 @@ func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
 	params := &stripe.PriceListParams{}
 	var prices []*model.Price
 	i := client.Prices.List(params)
+
 	for i.Next() {
 		converted_price := conversions.ConvertPrice(i.Price())
 		prices = append(prices, converted_price)
