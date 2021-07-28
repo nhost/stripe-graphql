@@ -18,17 +18,6 @@ input CustomerInput {
     phone: String
 }
 
-input CreateSubscriptionInput {
-    customer: String!
-    items: [SubscriptionItemInput!]
-}
-
-input UpdateSubscriptionInput {
-    customer: String!
-    items: [SubscriptionItemInput!]
-}
-
-
 input SubscriptionItemInput {
     price: String
     price_data: PriceDataInput

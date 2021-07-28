@@ -6,8 +6,6 @@ import (
 )
 
 func ConvertSubscription(old_subscription *stripe.Subscription) *model.StripeSubscription {
-	current_period_start := (int)(old_subscription.CurrentPeriodStart)
-	current_period_end := (int)(old_subscription.CurrentPeriodEnd)
 	var items []*model.SubscriptionItem
 	if old_subscription.Items != nil {
 		for _, item := range old_subscription.Items.Data {
@@ -28,20 +26,20 @@ func ConvertSubscription(old_subscription *stripe.Subscription) *model.StripeSub
 	return &model.StripeSubscription{
 		ID:                   old_subscription.ID,
 		CancelAtPeriodEnd:    old_subscription.CancelAtPeriodEnd,
-		CancelAt:             int(old_subscription.CancelAt),
-		CurrentPeriodStart:   current_period_start,
-		CurrentPeriodEnd:     current_period_end,
+		CancelAt:             old_subscription.CancelAt,
+		CurrentPeriodStart:   old_subscription.CurrentPeriodStart,
+		CurrentPeriodEnd:     old_subscription.CurrentPeriodEnd,
 		Customer:             customer,
 		Items:                items,
 		DefaultPaymentMethod: default_pay_method,
 		Status:               string(old_subscription.Status),
-		Created:              int(old_subscription.Created),
-		EndedAt:              int(old_subscription.EndedAt),
-		CanceledAt:           int(old_subscription.CanceledAt),
-		DaysUntilDue:         int(old_subscription.DaysUntilDue),
+		Created:              old_subscription.Created,
+		EndedAt:              old_subscription.EndedAt,
+		CanceledAt:           old_subscription.CanceledAt,
+		DaysUntilDue:         old_subscription.DaysUntilDue,
 		Livemode:             old_subscription.Livemode,
-		TrialStart:           int(old_subscription.TrialStart),
-		TrialEnd:             int(old_subscription.TrialEnd),
+		TrialStart:           old_subscription.TrialStart,
+		TrialEnd:             old_subscription.TrialEnd,
 	}
 }
 
@@ -53,7 +51,7 @@ func ConvertSubscriptionItem(old *stripe.SubscriptionItem) *model.SubscriptionIt
 
 	return &model.SubscriptionItem{
 		ID:       old.ID,
-		Quantity: int(old.Quantity),
+		Quantity: old.Quantity,
 		Price:    p,
 	}
 }

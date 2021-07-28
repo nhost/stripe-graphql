@@ -7,7 +7,6 @@ import (
 
 func ConvertCustomer(old_customer *stripe.Customer) *model.Customer {
 	currency := string(old_customer.Currency)
-	created := int(old_customer.Created)
 	address := ConvertAddress(&old_customer.Address)
 	var subscriptions []*model.StripeSubscription
 	if old_customer.Subscriptions != nil {
@@ -22,7 +21,7 @@ func ConvertCustomer(old_customer *stripe.Customer) *model.Customer {
 		Address:       address,
 		Phone:         old_customer.Phone,
 		Currency:      currency,
-		Created:       created,
+		Created:       old_customer.Created,
 		Livemode:      old_customer.Livemode,
 		Subscriptions: subscriptions,
 	}

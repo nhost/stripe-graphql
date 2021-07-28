@@ -24,7 +24,7 @@ func ConvertPrice(old_price *stripe.Price) *model.Price {
 		Nickname:      old_price.Nickname,
 		Livemode:      old_price.Livemode,
 		Currency:      currency,
-		Created:       int(old_price.Created),
+		Created:       old_price.Created,
 		Active:        old_price.Active,
 		BillingScheme: billing_scheme,
 		Product:       p,
@@ -37,7 +37,7 @@ func ConvertPrice(old_price *stripe.Price) *model.Price {
 func ConvertRecurring(old *stripe.PriceRecurring) *model.PriceRecurring {
 
 	new := &model.PriceRecurring{
-		IntervalCount:  (int)(old.IntervalCount),
+		IntervalCount:  old.IntervalCount,
 		Interval:       (model.RecurringInterval)(old.Interval),
 		AggregateUsage: (model.PriceRecurringAggregateUsage)(old.AggregateUsage),
 		UsageType:      (model.PriceRecurringUsageType)(old.UsageType),

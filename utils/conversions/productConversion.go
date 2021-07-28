@@ -6,11 +6,10 @@ import (
 )
 
 func ConvertProduct(old_product *stripe.Product) *model.Product {
-	created := (int)(old_product.Created)
 	new := &model.Product{
 		ID:          old_product.ID,
 		Description: old_product.Description,
-		Created:     created,
+		Created:     old_product.Created,
 		Livemode:    old_product.Livemode,
 		Active:      old_product.Active,
 		Name:        old_product.Name,

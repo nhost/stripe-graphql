@@ -10,6 +10,7 @@ import (
 	"github.com/nhost/stripe-graphql/graph/model"
 	"github.com/nhost/stripe-graphql/utils"
 	"github.com/nhost/stripe-graphql/utils/conversions"
+	"github.com/nhost/stripe-graphql/utils/conversions/params"
 	stripe "github.com/stripe/stripe-go/v72"
 )
 
@@ -74,19 +75,7 @@ func (r *mutationResolver) InsertSubscription(ctx context.Context, input model.C
 		return nil, err
 	}
 
-	var items []*stripe.SubscriptionItemsParams
-
-	for _, item := range input.Items {
-		stripe_params := conversions.ConvertToSubscriptionItemsParams(item)
-		items = append(items, stripe_params)
-	}
-
-	params := &stripe.SubscriptionParams{
-		Customer: &input.Customer,
-		Items:    items,
-	}
-
-	s, err := client.Subscriptions.New(params)
+	s, err := client.Subscriptions.New(params.ConvertToSubscriptionParams(&input))
 
 	if err != nil {
 		return nil, err
@@ -102,19 +91,7 @@ func (r *mutationResolver) UpdateSubscription(ctx context.Context, id string, in
 		return nil, err
 	}
 
-	var items []*stripe.SubscriptionItemsParams
-
-	for _, item := range input.Items {
-		stripe_params := conversions.ConvertToSubscriptionItemsParams(item)
-		items = append(items, stripe_params)
-	}
-
-	params := &stripe.SubscriptionParams{
-		Customer: &input.Customer,
-		Items:    items,
-	}
-
-	s, err := client.Subscriptions.Update(id, params)
+	s, err := client.Subscriptions.Update(id, params.ConvertToSubscriptionUpdateParams(&input))
 
 	if err != nil {
 		return nil, err

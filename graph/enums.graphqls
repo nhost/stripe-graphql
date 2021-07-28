@@ -70,3 +70,10 @@ enum price_recurring_usage_type {
   metered
   licensed
 }
+
+enum payment_behavior {
+    allow_incomplete
+    error_if_incomplete
+    pending_if_incomplete
+    default_incomplete 
+}

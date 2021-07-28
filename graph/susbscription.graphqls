@@ -1,25 +1,3 @@
-# type Data {
-#   id: String
-#   object: String
-#   billing_thresholds: String
-#   created: Int
-#   quantity: Int
-#   subscription: String
-#   tax_rates: [String]
-#   price: Price
-# }
-
-# type Items {
-#   object: String
-#   has_more: Boolean
-#   url: String
-#   data: [Data]
-# }
-
-# type AutomaticTax {
-#   enabled: Boolean
-# }
-
 type Stripe_Subscription {
   id: String!
   cancel_at_period_end: Boolean!
@@ -43,4 +21,23 @@ type SubscriptionItem {
   id: String!
   quantity: Int!
   price: Price
+}
+
+input CreateSubscriptionInput {
+  customer: String!
+  items: [SubscriptionItemInput!]!
+  cancel_at_period_end: Boolean
+  default_payment_method_id: String
+  cancel_at: Int
+  days_until_due: Int
+  trial_end: Int
+}
+
+input UpdateSubscriptionInput {
+  items: [SubscriptionItemInput!]
+  cancel_at_period_end: Boolean
+  default_payment_method_id: String
+  cancel_at: Int
+  days_until_due: Int
+  trial_end: Int
 }

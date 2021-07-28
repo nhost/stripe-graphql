@@ -20,7 +20,7 @@ func ConvertPaymentMethod(old *stripe.PaymentMethod) *model.PaymentMethod {
 	new := &model.PaymentMethod{
 		ID:       old.ID,
 		Customer: c,
-		Created:  int(old.Created),
+		Created:  old.Created,
 		Object:   old.Object,
 		Livemode: old.Livemode,
 		Type:     string(old.Type),
@@ -34,8 +34,8 @@ func ConvertCard(old_card *stripe.PaymentMethodCard) *model.Card {
 	new := &model.Card{
 		Brand:    string(old_card.Brand),
 		Country:  old_card.Country,
-		ExpMonth: int(old_card.ExpMonth),
-		ExpYear:  int(old_card.ExpYear),
+		ExpMonth: int64(old_card.ExpMonth),
+		ExpYear:  int64(old_card.ExpYear),
 		Funding:  model.FundingType(old_card.Funding),
 		Last4:    old_card.Last4,
 	}
