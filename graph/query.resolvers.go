@@ -30,7 +30,9 @@ func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error
 
 	var new_customers []*model.Customer
 	for i.Next() {
-		new_customers = append(new_customers, conversions.ConvertCustomer(i.Customer()))
+		c := conversions.ConvertCustomer(i.Customer())
+		utils.AddInvoicesToCustomer(c, client)
+		new_customers = append(new_customers, c)
 	}
 
 	return new_customers, nil
@@ -53,6 +55,7 @@ func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Custom
 
 	if c != nil {
 		converted_customer := conversions.ConvertCustomer(c)
+		utils.AddInvoicesToCustomer(converted_customer, client)
 		return converted_customer, nil
 	}
 	return nil, nil
