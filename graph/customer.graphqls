@@ -8,7 +8,7 @@ type Customer {
   livemode: Boolean!
   name: String!
   phone: String!
-  subscriptions: [Stripe_Subscription!] 
+  subscriptions: [StripeSubscription!] 
   invoices: [Invoice!]
 }
 

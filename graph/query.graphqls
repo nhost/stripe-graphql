@@ -5,10 +5,10 @@ type Query {
   invoice(id: String!): Invoice
   prices: [Price!]
   price(id: String!): Price
-  payment_methods(customer: String!, type: payment_method_types!): [PaymentMethod!]
-  payment_method(id: String!): PaymentMethod
-  subscriptions: [Stripe_Subscription!]
-  subscription(id: String!): Stripe_Subscription
+  paymentMethods(customer: String!, type: payment_method_types!): [PaymentMethod!]
+  paymentMethod(id: String!): PaymentMethod
+  subscriptions: [StripeSubscription!]
+  subscription(id: String!): StripeSubscription
   products: [Product!]
   product(id: String!): Product
 }

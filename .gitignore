@@ -3,3 +3,4 @@ generated/
 model/
 
 *.env
+.DS_STORE
