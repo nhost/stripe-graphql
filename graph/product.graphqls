@@ -6,4 +6,5 @@ type Product {
   description: String!
   livemode: Boolean!
   name: String!
+  prices: [Price!]
 }

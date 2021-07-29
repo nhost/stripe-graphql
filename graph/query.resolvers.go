@@ -232,6 +232,7 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 	var products []*model.Product
 	for i.Next() {
 		converted_product := conversions.ConvertProduct(i.Product())
+		utils.AddPriceToProduct(converted_product, client)
 		products = append(products, converted_product)
 	}
 
@@ -253,6 +254,7 @@ func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product,
 
 	if p != nil {
 		converted_product := conversions.ConvertProduct(p)
+		utils.AddPriceToProduct(converted_product, client)
 		return converted_product, nil
 	}
 
