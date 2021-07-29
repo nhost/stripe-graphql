@@ -20,3 +20,20 @@ type Address {
   postal_code: String
   state: String
 }
+
+input CustomerInput {
+    name: String
+    address: AddressInput
+    description: String
+    email: String
+    phone: String
+}
+
+input AddressInput {
+    city: String
+    country: String
+    postal_code: String
+    line1: String
+    line2: String
+    state: String
+}

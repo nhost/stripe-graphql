@@ -1,4 +1,4 @@
-type Stripe_Subscription {
+type StripeSubscription {
   id: String!
   cancel_at_period_end: Boolean!
   cancel_at: Int!

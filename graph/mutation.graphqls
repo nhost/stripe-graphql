@@ -1,21 +1,13 @@
 type Mutation {
-    insert_customer(input: CustomerInput!): Customer
-    update_customer(id: String!, input: CustomerInput!): Customer
-    delete_customer(id: String!): Customer
-    insert_subscription(input: CreateSubscriptionInput!): Stripe_Subscription
-    update_subscription(id: String!, input: UpdateSubscriptionInput!): Stripe_Subscription
-    cancel_subscription(id: String!): Stripe_Subscription
+    createCustomer(input: CustomerInput!): Customer
+    updateCustomer(id: String!, input: CustomerInput!): Customer
+    deleteCustomer(id: String!): Customer
+    createSubscription(input: CreateSubscriptionInput!): Stripe_Subscription
+    updateSubscription(id: String!, input: UpdateSubscriptionInput!): Stripe_Subscription
+    cancelSubscription(id: String!): Stripe_Subscription
     # insert_product(): Product
     # update_product(): Product
     # delete_product(): Product
-}
-
-input CustomerInput {
-    name: String
-    address: AddressInput
-    description: String
-    email: String
-    phone: String
 }
 
 input SubscriptionItemInput {
@@ -32,13 +24,4 @@ input PriceDataInput {
 input PriceDataRecurringInput {
     interval: recurring_interval!
     interval_count: Int
-}
-
-input AddressInput {
-    city: String
-    country: String
-    postal_code: String
-    line1: String
-    line2: String
-    state: String
 }
