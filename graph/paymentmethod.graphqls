@@ -1,9 +1,9 @@
 type Card {
   brand: String!
   country: String!
-  exp_month: Int!
-  exp_year: Int!
-  funding: funding_type!
+  expMonth: Int!
+  expYear: Int!
+  funding: fundingType!
   last4: String!
 }
 

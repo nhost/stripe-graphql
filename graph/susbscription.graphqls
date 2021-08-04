@@ -1,19 +1,19 @@
 type StripeSubscription {
   id: String!
-  cancel_at_period_end: Boolean!
-  cancel_at: Int!
-  canceled_at: Int!
+  cancelAtPeriodEnd: Boolean!
+  cancelAt: Int!
+  canceledAt: Int!
   created: Int!
-  current_period_end: Int!
-  current_period_start: Int!
+  currentPeriodEnd: Int!
+  currentPeriodStart: Int!
   customer: Customer
-  days_until_due: Int!
-  default_payment_method: PaymentMethod
-  ended_at: Int!
+  daysUntilDue: Int!
+  defaultPaymentMethod: PaymentMethod
+  endedAt: Int!
   livemode: Boolean!
   status: String!
-  trial_end: Int!
-  trial_start: Int!
+  trialEnd: Int!
+  trialStart: Int!
   items: [SubscriptionItem!]
 }
 
@@ -26,18 +26,18 @@ type SubscriptionItem {
 input CreateSubscriptionInput {
   customer: String!
   items: [SubscriptionItemInput!]!
-  cancel_at_period_end: Boolean
-  default_payment_method_id: String
-  cancel_at: Int
-  days_until_due: Int
-  trial_end: Int
+  cancelAtPeriodEnd: Boolean
+  defaultPaymentMethodId: String
+  cancelAt: Int
+  daysUntilDue: Int
+  trialEnd: Int
 }
 
 input UpdateSubscriptionInput {
   items: [SubscriptionItemInput!]
-  cancel_at_period_end: Boolean
-  default_payment_method_id: String
-  cancel_at: Int
-  days_until_due: Int
-  trial_end: Int
+  cancelAtPeriodEnd: Boolean
+  defaultPaymentMethodId: String
+  cancelAt: Int
+  daysUntilDue: Int
+  trialEnd: Int
 }

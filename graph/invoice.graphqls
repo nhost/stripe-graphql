@@ -1,76 +1,13 @@
-# type StatusTransitions { finalized_at: String
-#   marked_uncollectible_at: String
-#   paid_at: String
-#   voided_at: String }
-
-# type PaymentSettings { payment_method_options: String
-#   payment_method_types: String }
-
-# type Price { id: String
-#   object: String
-#   active: Boolean
-#   billing_scheme: String
-#   created: Int
-#   currency: String
-#   livemode: Boolean
-#   lookup_key: String
-#   nickname: String
-#   product: String
-#   recurring: String
-#   tax_behavior: String
-#   tiers_mode: String
-#   transform_quantity: String
-#   type: String
-#   unit_amount: Int
-#   unit_amount_decimal: String }
-
-# type Period { end: Int start: Int }
-
-# type Data { id: String
-#   object: String
-#   amount: Int
-#   currency: String
-#   description: String
-#   discountable: Boolean
-#   invoice_item: String
-#   livemode: Boolean
-#   proration: Boolean
-#   quantity: Int
-#   subscription: String
-#   type: String
-#   tax_rates: [String ]
-#   tax_amounts: [String ]
-#   price: Price
-#   period: Period
-#   discounts: [String ]
-#   discount_amounts: [String ] }
-
-# type Lines { object: String
-#   has_more: Boolean
-#   url: String
-#   data: [Data ] }
-
-# type Address { city: String
-#   country: String
-#   line1: String
-#   line2: String
-#   postal_code: String
-#   state: String }
-
-# type CustomerShipping { name: String phone: String address: Address }
-
-# type AutomaticTax { enabled: Boolean status: String }
-
 type Invoice {
   id: String!
   created: Int!
-  currency: currency_types!
+  currency: currencyTypes!
   customer: Customer
-  hosted_invoice_url: String!
+  hostedInvoiceUrl: String!
   livemode: Boolean!
   paid: Boolean!
-  period_end: Int!
-  period_start: Int!
+  periodEnd: Int!
+  periodStart: Int!
   status: String!
   subtotal: Int!
   tax: Int!

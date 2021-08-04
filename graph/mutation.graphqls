@@ -5,23 +5,20 @@ type Mutation {
     createSubscription(input: CreateSubscriptionInput!): StripeSubscription
     updateSubscription(id: String!, input: UpdateSubscriptionInput!): StripeSubscription
     cancelSubscription(id: String!): StripeSubscription
-    # insert_product(): Product
-    # update_product(): Product
-    # delete_product(): Product
 }
 
 input SubscriptionItemInput {
     price: String
-    price_data: PriceDataInput
+    priceData: PriceDataInput
 }
 
 input PriceDataInput {
-    currency: currency_types!
+    currency: currencyTypes!
     product: String!
     recurring: PriceDataRecurringInput
 }
 
 input PriceDataRecurringInput {
-    interval: recurring_interval!
-    interval_count: Int
+    interval: recurringInterval!
+    intervalCount: Int
 }

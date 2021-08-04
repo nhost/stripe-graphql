@@ -1,15 +1,15 @@
 type PriceRecurring {
-  aggregate_usage: price_recurring_aggregate_usage!
-  interval: recurring_interval!
-  interval_count: Int!
-  usage_type: price_recurring_usage_type!
+  aggregateUsage: priceRecurringAggregateUsage!
+  interval: recurringInterval!
+  intervalCount: Int!
+  usageType: priceRecurringUsageType!
 }
 
 type Price {
   id: String!
   object: String!
   active: Boolean!
-  billing_scheme: String!
+  billingScheme: String!
   created: Int!
   currency: String!
   livemode: Boolean!

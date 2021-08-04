@@ -17,7 +17,7 @@ type Address {
   country: String
   line1: String
   line2: String
-  postal_code: String
+  postalCode: String
   state: String
 }
 
@@ -32,7 +32,7 @@ input CustomerInput {
 input AddressInput {
     city: String
     country: String
-    postal_code: String
+    postalCode: String
     line1: String
     line2: String
     state: String

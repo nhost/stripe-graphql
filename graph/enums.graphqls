@@ -1,9 +1,9 @@
-enum payment_method_types {
-  acss_debit
-  afterpay_clearpay
+enum paymentMethodTypes {
+  acssdebit
+  afterpayclearpay
   alipay
-  au_becs_debit
-  bacs_debit
+  aubecsdebit
+  bacsdebit
   bancontact
   boleto
   card
@@ -14,12 +14,12 @@ enum payment_method_types {
   ideal
   oxxo
   p24
-  sepa_debit
+  sepadebit
   sofort
-  wechat_pay
+  wechatpay
 }
 
-enum currency_types {
+enum currencyTypes {
   USD
   AED
   AUD
@@ -45,35 +45,35 @@ enum currency_types {
   SGD
 }
 
-enum recurring_interval {
+enum recurringInterval {
     day
     week
     month
     year
 }
 
-enum funding_type {
+enum fundingType {
   credit
   debit
   unknown
   prepaid
 }
 
-enum price_recurring_aggregate_usage {
+enum priceRecurringAggregateUsage {
   sum
-  last_during_period
-  last_ever
+  lastduringperiod
+  lastever
   max
 }
 
-enum price_recurring_usage_type {
+enum priceRecurringUsageType {
   metered
   licensed
 }
 
-enum payment_behavior {
-    allow_incomplete
-    error_if_incomplete
-    pending_if_incomplete
-    default_incomplete 
+enum paymentBehavior {
+    allowincomplete
+    errorifincomplete
+    pendingifincomplete
+    defaultincomplete 
 }
