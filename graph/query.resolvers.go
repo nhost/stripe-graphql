@@ -38,7 +38,7 @@ func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error
 	return new_customers, nil
 }
 
-func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Customer, error) {
+func (r *queryResolver) Customer(ctx context.Context, id string) (*model.Customer, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -47,7 +47,7 @@ func (r *queryResolver) Customer(ctx context.Context, id *string) (*model.Custom
 
 	params := &stripe.CustomerParams{}
 	params.AddExpand("subscriptions")
-	c, err := client.Customers.Get(*id, params)
+	c, err := client.Customers.Get(id, params)
 
 	if err != nil {
 		return nil, err

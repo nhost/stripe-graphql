@@ -1,6 +1,7 @@
 package server
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -22,6 +23,7 @@ func CreateServer() {
 	}
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	http.Handle("/query", utils.StripeKeyMiddleware(srv))
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))

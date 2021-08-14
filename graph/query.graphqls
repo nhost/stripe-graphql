@@ -1,6 +1,6 @@
 type Query {
   customers: [Customer!]
-  customer(id: String): Customer
+  customer(id: String!): Customer
   invoices: [Invoice!]
   invoice(id: String!): Invoice
   prices: [Price!]
