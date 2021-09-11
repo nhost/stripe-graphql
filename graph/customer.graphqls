@@ -10,6 +10,7 @@ type Customer {
   phone: String!
   subscriptions: [StripeSubscription!] 
   invoices: [Invoice!]
+  paymentMethods(type: paymentMethodTypes = "card"): [PaymentMethod!]
 }
 
 type Address {

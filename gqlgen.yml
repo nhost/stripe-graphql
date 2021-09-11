@@ -52,3 +52,9 @@ models:
   Int:
     model:
       - github.com/99designs/gqlgen/graphql.Int64
+
+  Customer:
+      fields:
+        paymentMethods:
+          resolver: true
+
