@@ -1,6 +1,6 @@
-type Customer {
+type StripeCustomer {
   id: String!
-  address: Address!
+  address: StripeAddress!
   balance: Int!
   created: Int!
   currency: String!
@@ -9,11 +9,11 @@ type Customer {
   name: String!
   phone: String!
   subscriptions: [StripeSubscription!] 
-  invoices: [Invoice!]
-  paymentMethods(type: paymentMethodTypes = "card"): [PaymentMethod!]
+  invoices: [StripeInvoice!]
+  paymentMethods(type: paymentMethodTypes = "card"): [StripePaymentMethod!]
 }
 
-type Address {
+type StripeAddress {
   city: String
   country: String
   line1: String
@@ -22,15 +22,15 @@ type Address {
   state: String
 }
 
-input CustomerInput {
+input StripeCustomerInput {
     name: String
-    address: AddressInput
+    address: StripeAddressInput
     description: String
     email: String
     phone: String
 }
 
-input AddressInput {
+input StripeAddressInput {
     city: String
     country: String
     postalCode: String

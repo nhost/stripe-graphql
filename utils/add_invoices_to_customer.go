@@ -7,7 +7,7 @@ import (
 	"github.com/stripe/stripe-go/v72/client"
 )
 
-func AddInvoicesToCustomer(c *model.Customer, client *client.API) {
+func AddInvoicesToCustomer(c *model.StripeCustomer, client *client.API) {
 	if c == nil {
 		return
 	}
@@ -17,7 +17,7 @@ func AddInvoicesToCustomer(c *model.Customer, client *client.API) {
 	}
 
 	invoices := client.Invoices.List(&params)
-	var converted []*model.Invoice
+	var converted []*model.StripeInvoice
 
 	for invoices.Next() {
 		converted = append(converted, conversions.ConvertInvoice(invoices.Invoice()))

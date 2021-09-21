@@ -5,8 +5,8 @@ import (
 	"github.com/stripe/stripe-go/v72"
 )
 
-func ConvertProduct(old_product *stripe.Product) *model.Product {
-	new := &model.Product{
+func ConvertProduct(old_product *stripe.Product) *model.StripeProduct {
+	new := &model.StripeProduct{
 		ID:          old_product.ID,
 		Description: old_product.Description,
 		Created:     old_product.Created,

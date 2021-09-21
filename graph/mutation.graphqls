@@ -1,7 +1,7 @@
 type Mutation {
-    createCustomer(input: CustomerInput!): Customer
-    updateCustomer(id: String!, input: CustomerInput!): Customer
-    deleteCustomer(id: String!): Customer
+    createCustomer(input: StripeCustomerInput!): StripeCustomer
+    updateCustomer(id: String!, input: StripeCustomerInput!): StripeCustomer
+    deleteCustomer(id: String!): StripeCustomer
     createSubscription(input: CreateSubscriptionInput!): StripeSubscription
     updateSubscription(id: String!, input: UpdateSubscriptionInput!): StripeSubscription
     cancelSubscription(id: String!): StripeSubscription

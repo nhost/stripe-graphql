@@ -6,21 +6,21 @@ type StripeSubscription {
   created: Int!
   currentPeriodEnd: Int!
   currentPeriodStart: Int!
-  customer: Customer
+  customer: StripeCustomer
   daysUntilDue: Int!
-  defaultPaymentMethod: PaymentMethod
+  defaultPaymentMethod: StripePaymentMethod
   endedAt: Int!
   livemode: Boolean!
   status: String!
   trialEnd: Int!
   trialStart: Int!
-  items: [SubscriptionItem!]
+  items: [StripeSubscriptionItem!]
 }
 
-type SubscriptionItem {
+type StripeSubscriptionItem {
   id: String!
   quantity: Int!
-  price: Price
+  price: StripePrice
 }
 
 input CreateSubscriptionInput {

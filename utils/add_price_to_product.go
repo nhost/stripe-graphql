@@ -7,7 +7,7 @@ import (
 	"github.com/stripe/stripe-go/v72/client"
 )
 
-func AddPriceToProduct(p *model.Product, client *client.API) {
+func AddPriceToProduct(p *model.StripeProduct, client *client.API) {
 	if p == nil {
 		return
 	}
@@ -17,7 +17,7 @@ func AddPriceToProduct(p *model.Product, client *client.API) {
 	}
 
 	prices := client.Prices.List(&params)
-	var converted_prices []*model.Price
+	var converted_prices []*model.StripePrice
 	for prices.Next() {
 		converted_prices = append(converted_prices, conversions.ConvertPrice(prices.Price()))
 	}

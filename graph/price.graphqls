@@ -1,11 +1,11 @@
-type PriceRecurring {
+type StripePriceRecurring {
   aggregateUsage: priceRecurringAggregateUsage!
   interval: recurringInterval!
   intervalCount: Int!
   usageType: priceRecurringUsageType!
 }
 
-type Price {
+type StripePrice {
   id: String!
   object: String!
   active: Boolean!
@@ -14,6 +14,6 @@ type Price {
   currency: String!
   livemode: Boolean!
   nickname: String!
-  product: Product
-  recurring: PriceRecurring
+  product: StripeProduct
+  recurring: StripePriceRecurring
 }

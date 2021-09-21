@@ -5,32 +5,32 @@ import (
 	"github.com/stripe/stripe-go/v72"
 )
 
-func ConvertInvoice(old_invoice *stripe.Invoice) *model.Invoice {
+func ConvertInvoice(old_invoice *stripe.Invoice) *model.StripeInvoice {
 
 	currencyStr := (string(old_invoice.Currency))
 	currency := (model.CurrencyTypes)(currencyStr)
 
-	var c *model.Customer = nil
+	var c *model.StripeCustomer = nil
 	if old_invoice.Customer != nil {
 		c = ConvertCustomer(old_invoice.Customer)
 	}
 
-	var line_object *model.Lines = nil
+	var line_object *model.StripeLines = nil
 
 	if len(old_invoice.Lines.Data) != 0 {
-		var lines []*model.InvoiceLine
+		var lines []*model.StripeInvoiceLine
 		for _, line := range old_invoice.Lines.Data {
 			lines = append(lines, ConvertInvoiceLine(line))
 		}
 
 		object := "list"
-		line_object = &model.Lines{
+		line_object = &model.StripeLines{
 			Object: &object,
 			Data:   lines,
 		}
 	}
 
-	new_invoice := &model.Invoice{
+	new_invoice := &model.StripeInvoice{
 		ID:               old_invoice.ID,
 		Currency:         currency,
 		Created:          old_invoice.Created,
@@ -49,9 +49,9 @@ func ConvertInvoice(old_invoice *stripe.Invoice) *model.Invoice {
 	return new_invoice
 }
 
-func ConvertInvoiceLine(old_line *stripe.InvoiceLine) *model.InvoiceLine {
+func ConvertInvoiceLine(old_line *stripe.InvoiceLine) *model.StripeInvoiceLine {
 	currency := string(old_line.Currency)
-	new := &model.InvoiceLine{
+	new := &model.StripeInvoiceLine{
 		ID:          old_line.ID,
 		Amount:      old_line.Amount,
 		Currency:    currency,

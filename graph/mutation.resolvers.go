@@ -14,7 +14,7 @@ import (
 	stripe "github.com/stripe/stripe-go/v72"
 )
 
-func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.CustomerInput) (*model.Customer, error) {
+func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.StripeCustomerInput) (*model.StripeCustomer, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -33,7 +33,7 @@ func (r *mutationResolver) CreateCustomer(ctx context.Context, input model.Custo
 	return conversions.ConvertCustomer(c), nil
 }
 
-func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input model.CustomerInput) (*model.Customer, error) {
+func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input model.StripeCustomerInput) (*model.StripeCustomer, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -52,7 +52,7 @@ func (r *mutationResolver) UpdateCustomer(ctx context.Context, id string, input 
 	return conversions.ConvertCustomer(c), nil
 }
 
-func (r *mutationResolver) DeleteCustomer(ctx context.Context, id string) (*model.Customer, error) {
+func (r *mutationResolver) DeleteCustomer(ctx context.Context, id string) (*model.StripeCustomer, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
