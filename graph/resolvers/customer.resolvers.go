@@ -1,4 +1,4 @@
-package graph
+package resolvers
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -6,13 +6,14 @@ package graph
 import (
 	"context"
 
+	"github.com/nhost/stripe-graphql/graph/generated"
 	"github.com/nhost/stripe-graphql/graph/model"
 	"github.com/nhost/stripe-graphql/utils"
 	"github.com/nhost/stripe-graphql/utils/conversions"
 	stripe "github.com/stripe/stripe-go/v72"
 )
 
-func (r *customerResolver) PaymentMethods(ctx context.Context, obj *model.StripeCustomer, typeArg *model.PaymentMethodTypes) ([]*model.StripePaymentMethod, error) {
+func (r *stripeCustomerResolver) PaymentMethods(ctx context.Context, obj *model.StripeCustomer, typeArg *model.PaymentMethodTypes) ([]*model.StripePaymentMethod, error) {
 	client, err := utils.GetClientFromContext(ctx)
 	if err != nil {
 		return nil, err
@@ -42,4 +43,9 @@ func (r *customerResolver) PaymentMethods(ctx context.Context, obj *model.Stripe
 	return converted, nil
 }
 
-type customerResolver struct{ *Resolver }
+// StripeCustomer returns generated.StripeCustomerResolver implementation.
+func (r *Resolver) StripeCustomer() generated.StripeCustomerResolver {
+	return &stripeCustomerResolver{r}
+}
+
+type stripeCustomerResolver struct{ *Resolver }

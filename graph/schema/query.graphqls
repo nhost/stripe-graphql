@@ -1,4 +1,4 @@
-type StripeQuery {
+type Query {
   customers: [StripeCustomer!]
   customer(id: String!): StripeCustomer
   invoices: [StripeInvoice!]
