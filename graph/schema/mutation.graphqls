@@ -2,23 +2,23 @@ type Mutation {
     createCustomer(input: StripeCustomerInput!): StripeCustomer
     updateCustomer(id: String!, input: StripeCustomerInput!): StripeCustomer
     deleteCustomer(id: String!): StripeCustomer
-    createSubscription(input: CreateSubscriptionInput!): StripeSubscription
-    updateSubscription(id: String!, input: UpdateSubscriptionInput!): StripeSubscription
+    createSubscription(input: StripeCreateSubscriptionInput!): StripeSubscription
+    updateSubscription(id: String!, input: StripeUpdateSubscriptionInput!): StripeSubscription
     cancelSubscription(id: String!): StripeSubscription
 }
 
-input SubscriptionItemInput {
+input StripeSubscriptionItemInput {
     price: String
-    priceData: PriceDataInput
+    priceData: StripePriceDataInput
 }
 
-input PriceDataInput {
+input StripePriceDataInput {
     currency: currencyTypes!
     product: String!
-    recurring: PriceDataRecurringInput
+    recurring: StripePriceDataRecurringInput
 }
 
-input PriceDataRecurringInput {
+input StripePriceDataRecurringInput {
     interval: recurringInterval!
     intervalCount: Int
 }
