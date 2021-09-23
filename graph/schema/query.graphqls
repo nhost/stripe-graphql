@@ -1,14 +1,14 @@
 type Query {
-  customers: [StripeCustomer!]
-  customer(id: String!): StripeCustomer
-  invoices: [StripeInvoice!]
-  invoice(id: String!): StripeInvoice
-  prices: [StripePrice!]
-  price(id: String!): StripePrice
-  paymentMethods(customer: String!, type: paymentMethodTypes!): [StripePaymentMethod!]
-  paymentMethod(id: String!): StripePaymentMethod
-  subscriptions: [StripeSubscription!]
-  subscription(id: String!): StripeSubscription
-  products: [StripeProduct!]
-  product(id: String!): StripeProduct
+  stripeCustomers: [StripeCustomer!]
+  stripeCustomer(id: String!): StripeCustomer
+  stripeInvoices: [StripeInvoice!]
+  stripeInvoice(id: String!): StripeInvoice
+  stripePrices: [StripePrice!]
+  stripePrice(id: String!): StripePrice
+  stripePaymentMethods(customer: String!, type: paymentMethodTypes!): [StripePaymentMethod!]
+  stripePaymentMethod(id: String!): StripePaymentMethod
+  stripeSubscriptions: [StripeSubscription!]
+  stripeSubscription(id: String!): StripeSubscription
+  stripeProducts: [StripeProduct!]
+  stripeProduct(id: String!): StripeProduct
 }

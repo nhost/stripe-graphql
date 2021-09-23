@@ -1,10 +1,10 @@
 type Mutation {
-    createCustomer(input: StripeCustomerInput!): StripeCustomer
-    updateCustomer(id: String!, input: StripeCustomerInput!): StripeCustomer
-    deleteCustomer(id: String!): StripeCustomer
-    createSubscription(input: StripeCreateSubscriptionInput!): StripeSubscription
-    updateSubscription(id: String!, input: StripeUpdateSubscriptionInput!): StripeSubscription
-    cancelSubscription(id: String!): StripeSubscription
+    stripeCreateCustomer(input: StripeCustomerInput!): StripeCustomer
+    stripeUpdateCustomer(id: String!, input: StripeCustomerInput!): StripeCustomer
+    stripeDeleteCustomer(id: String!): StripeCustomer
+    stripeCreateSubscription(input: StripeCreateSubscriptionInput!): StripeSubscription
+    stripeUpdateSubscription(id: String!, input: StripeUpdateSubscriptionInput!): StripeSubscription
+    stripeCancelSubscription(id: String!): StripeSubscription
 }
 
 input StripeSubscriptionItemInput {
