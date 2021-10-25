@@ -9,8 +9,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/nhost/stripe-graphql/graph"
 	"github.com/nhost/stripe-graphql/graph/generated"
+	"github.com/nhost/stripe-graphql/graph/resolvers"
 	"github.com/nhost/stripe-graphql/utils"
 	"github.com/nhost/stripe-graphql/utils/constants"
 )
@@ -22,7 +22,7 @@ func CreateServer() {
 		port = constants.DEFAULT_PORT
 	}
 
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{}}))
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	http.Handle("/query", utils.StripeKeyMiddleware(srv))

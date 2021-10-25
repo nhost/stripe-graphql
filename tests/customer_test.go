@@ -46,8 +46,8 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 	var m map[string]interface{}
 
 	req := graphql.NewRequest(`
-		mutation ($customer: CustomerInput) {
-			insert_customer(input: $customer) {
+		mutation ($customer: StripeCustomerInput!) {
+			createCustomer(input: $customer) {
 			  id
 			  name
 			  email
@@ -71,7 +71,7 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 		t.Fatalf("%v%v", addErrorPrefix, err)
 	}
 
-	new_customer, ok := m["insert_customer"].(map[string]interface{})
+	new_customer, ok := m["createCustomer"].(map[string]interface{})
 
 	new_id := fmt.Sprint(new_customer["id"])
 
@@ -86,8 +86,8 @@ func TestAddAndDeleteCustomer(t *testing.T) {
 	t.Cleanup(func() {
 
 		req := graphql.NewRequest(`
-		mutation ($id: ID!) {
-			delete_customer(id: $id) {
+		mutation ($id: String!) {
+			deleteCustomer(id: $id) {
 			  id
 			  email
 			}

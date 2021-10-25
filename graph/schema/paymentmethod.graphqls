@@ -1,4 +1,4 @@
-type Card {
+type StripeCard {
   brand: String!
   country: String!
   expMonth: Int!
@@ -7,12 +7,12 @@ type Card {
   last4: String!
 }
 
-type PaymentMethod {
+type StripePaymentMethod {
   id: String!
   object: String!
   created: Int!
-  customer: Customer
+  customer: StripeCustomer
   livemode: Boolean!
   type: String!
-  card: Card
+  card: StripeCard
 }

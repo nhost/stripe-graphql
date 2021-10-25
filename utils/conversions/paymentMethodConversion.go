@@ -5,19 +5,19 @@ import (
 	"github.com/stripe/stripe-go/v72"
 )
 
-func ConvertPaymentMethod(old *stripe.PaymentMethod) *model.PaymentMethod {
+func ConvertPaymentMethod(old *stripe.PaymentMethod) *model.StripePaymentMethod {
 
-	var c *model.Customer = nil
+	var c *model.StripeCustomer = nil
 	if old.Customer != nil {
 		c = ConvertCustomer(old.Customer)
 	}
 
-	var card *model.Card = nil
+	var card *model.StripeCard = nil
 	if old.Card != nil {
 		card = ConvertCard(old.Card)
 	}
 
-	new := &model.PaymentMethod{
+	new := &model.StripePaymentMethod{
 		ID:       old.ID,
 		Customer: c,
 		Created:  old.Created,
@@ -30,8 +30,8 @@ func ConvertPaymentMethod(old *stripe.PaymentMethod) *model.PaymentMethod {
 	return new
 }
 
-func ConvertCard(old_card *stripe.PaymentMethodCard) *model.Card {
-	new := &model.Card{
+func ConvertCard(old_card *stripe.PaymentMethodCard) *model.StripeCard {
+	new := &model.StripeCard{
 		Brand:    string(old_card.Brand),
 		Country:  old_card.Country,
 		ExpMonth: int64(old_card.ExpMonth),

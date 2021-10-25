@@ -6,19 +6,19 @@ import (
 )
 
 func ConvertSubscription(old_subscription *stripe.Subscription) *model.StripeSubscription {
-	var items []*model.SubscriptionItem
+	var items []*model.StripeSubscriptionItem
 	if old_subscription.Items != nil {
 		for _, item := range old_subscription.Items.Data {
 			items = append(items, ConvertSubscriptionItem(item))
 		}
 	}
 
-	var customer *model.Customer = nil
+	var customer *model.StripeCustomer = nil
 	if old_subscription.Customer != nil {
 		customer = ConvertCustomer(old_subscription.Customer)
 	}
 
-	var default_pay_method *model.PaymentMethod = nil
+	var default_pay_method *model.StripePaymentMethod = nil
 	if old_subscription.DefaultPaymentMethod != nil {
 		default_pay_method = ConvertPaymentMethod(old_subscription.DefaultPaymentMethod)
 	}
@@ -43,13 +43,13 @@ func ConvertSubscription(old_subscription *stripe.Subscription) *model.StripeSub
 	}
 }
 
-func ConvertSubscriptionItem(old *stripe.SubscriptionItem) *model.SubscriptionItem {
-	var p *model.Price = nil
+func ConvertSubscriptionItem(old *stripe.SubscriptionItem) *model.StripeSubscriptionItem {
+	var p *model.StripePrice = nil
 	if old.Price != nil {
 		p = ConvertPrice(old.Price)
 	}
 
-	return &model.SubscriptionItem{
+	return &model.StripeSubscriptionItem{
 		ID:       old.ID,
 		Quantity: old.Quantity,
 		Price:    p,

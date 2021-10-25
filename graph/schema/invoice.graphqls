@@ -1,8 +1,8 @@
-type Invoice {
+type StripeInvoice {
   id: String!
   created: Int!
   currency: currencyTypes!
-  customer: Customer
+  customer: StripeCustomer
   hostedInvoiceUrl: String!
   livemode: Boolean!
   paid: Boolean!
@@ -12,15 +12,15 @@ type Invoice {
   subtotal: Int!
   tax: Int!
   total: Int!
-  lines: Lines
+  lines: StripeLines
 }
 
-type Lines {
+type StripeLines {
   object: String
-  data: [InvoiceLine!]
+  data: [StripeInvoiceLine!]
 }
 
-type InvoiceLine {
+type StripeInvoiceLine {
   id: String!
   object: String!
   amount: Int!

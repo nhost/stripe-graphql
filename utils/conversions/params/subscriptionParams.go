@@ -5,7 +5,7 @@ import (
 	"github.com/stripe/stripe-go/v72"
 )
 
-func ConvertToSubscriptionParams(input *model.CreateSubscriptionInput) *stripe.SubscriptionParams {
+func ConvertToSubscriptionParams(input *model.StripeCreateSubscriptionInput) *stripe.SubscriptionParams {
 
 	var items []*stripe.SubscriptionItemsParams
 
@@ -27,7 +27,7 @@ func ConvertToSubscriptionParams(input *model.CreateSubscriptionInput) *stripe.S
 	return params
 }
 
-func ConvertToSubscriptionUpdateParams(input *model.UpdateSubscriptionInput) *stripe.SubscriptionParams {
+func ConvertToSubscriptionUpdateParams(input *model.StripeUpdateSubscriptionInput) *stripe.SubscriptionParams {
 
 	var items []*stripe.SubscriptionItemsParams
 
@@ -48,7 +48,7 @@ func ConvertToSubscriptionUpdateParams(input *model.UpdateSubscriptionInput) *st
 	return params
 }
 
-func ConvertToSubscriptionItemsParams(item *model.SubscriptionItemInput) *stripe.SubscriptionItemsParams {
+func ConvertToSubscriptionItemsParams(item *model.StripeSubscriptionItemInput) *stripe.SubscriptionItemsParams {
 	var price_data_params *stripe.SubscriptionItemPriceDataParams
 
 	if item.PriceData != nil {

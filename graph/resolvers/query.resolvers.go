@@ -1,4 +1,4 @@
-package graph
+package resolvers
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -13,7 +13,7 @@ import (
 	stripe "github.com/stripe/stripe-go/v72"
 )
 
-func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error) {
+func (r *queryResolver) StripeCustomers(ctx context.Context) ([]*model.StripeCustomer, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -28,7 +28,7 @@ func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error
 		return nil, i.Err()
 	}
 
-	var new_customers []*model.Customer
+	var new_customers []*model.StripeCustomer
 	for i.Next() {
 		c := conversions.ConvertCustomer(i.Customer())
 		utils.AddInvoicesToCustomer(c, client)
@@ -38,7 +38,7 @@ func (r *queryResolver) Customers(ctx context.Context) ([]*model.Customer, error
 	return new_customers, nil
 }
 
-func (r *queryResolver) Customer(ctx context.Context, id string) (*model.Customer, error) {
+func (r *queryResolver) StripeCustomer(ctx context.Context, id string) (*model.StripeCustomer, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -61,7 +61,7 @@ func (r *queryResolver) Customer(ctx context.Context, id string) (*model.Custome
 	return nil, nil
 }
 
-func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) {
+func (r *queryResolver) StripeInvoices(ctx context.Context) ([]*model.StripeInvoice, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -72,7 +72,7 @@ func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) 
 	params.AddExpand("data.customer")
 	i := client.Invoices.List(params)
 
-	var invoices []*model.Invoice
+	var invoices []*model.StripeInvoice
 
 	for i.Next() {
 		converted_invoice := conversions.ConvertInvoice(i.Invoice())
@@ -82,7 +82,7 @@ func (r *queryResolver) Invoices(ctx context.Context) ([]*model.Invoice, error) 
 	return invoices, nil
 }
 
-func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice, error) {
+func (r *queryResolver) StripeInvoice(ctx context.Context, id string) (*model.StripeInvoice, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -104,7 +104,7 @@ func (r *queryResolver) Invoice(ctx context.Context, id string) (*model.Invoice,
 	return nil, nil
 }
 
-func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
+func (r *queryResolver) StripePrices(ctx context.Context) ([]*model.StripePrice, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -112,7 +112,7 @@ func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
 	}
 
 	params := &stripe.PriceListParams{}
-	var prices []*model.Price
+	var prices []*model.StripePrice
 	i := client.Prices.List(params)
 
 	for i.Next() {
@@ -122,7 +122,7 @@ func (r *queryResolver) Prices(ctx context.Context) ([]*model.Price, error) {
 	return prices, nil
 }
 
-func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, error) {
+func (r *queryResolver) StripePrice(ctx context.Context, id string) (*model.StripePrice, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -142,7 +142,7 @@ func (r *queryResolver) Price(ctx context.Context, id string) (*model.Price, err
 	return nil, nil
 }
 
-func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typeArg model.PaymentMethodTypes) ([]*model.PaymentMethod, error) {
+func (r *queryResolver) StripePaymentMethods(ctx context.Context, customer string, typeArg model.PaymentMethodTypes) ([]*model.StripePaymentMethod, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -154,7 +154,7 @@ func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typ
 		Type:     (*string)(&typeArg),
 	}
 	i := client.PaymentMethods.List(params)
-	var payment_methods []*model.PaymentMethod
+	var payment_methods []*model.StripePaymentMethod
 	for i.Next() {
 		converted_object := conversions.ConvertPaymentMethod(i.PaymentMethod())
 		payment_methods = append(payment_methods, converted_object)
@@ -162,7 +162,7 @@ func (r *queryResolver) PaymentMethods(ctx context.Context, customer string, typ
 	return payment_methods, nil
 }
 
-func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.PaymentMethod, error) {
+func (r *queryResolver) StripePaymentMethod(ctx context.Context, id string) (*model.StripePaymentMethod, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -183,7 +183,7 @@ func (r *queryResolver) PaymentMethod(ctx context.Context, id string) (*model.Pa
 	return nil, nil
 }
 
-func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubscription, error) {
+func (r *queryResolver) StripeSubscriptions(ctx context.Context) ([]*model.StripeSubscription, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -201,7 +201,7 @@ func (r *queryResolver) Subscriptions(ctx context.Context) ([]*model.StripeSubsc
 	return subscriptions, nil
 }
 
-func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.StripeSubscription, error) {
+func (r *queryResolver) StripeSubscription(ctx context.Context, id string) (*model.StripeSubscription, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -222,7 +222,7 @@ func (r *queryResolver) Subscription(ctx context.Context, id string) (*model.Str
 	return nil, nil
 }
 
-func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
+func (r *queryResolver) StripeProducts(ctx context.Context) ([]*model.StripeProduct, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {
@@ -232,7 +232,7 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 	params := stripe.ProductListParams{}
 	i := client.Products.List(&params)
 
-	var products []*model.Product
+	var products []*model.StripeProduct
 	for i.Next() {
 		converted_product := conversions.ConvertProduct(i.Product())
 		utils.AddPriceToProduct(converted_product, client)
@@ -242,7 +242,7 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 	return products, nil
 }
 
-func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
+func (r *queryResolver) StripeProduct(ctx context.Context, id string) (*model.StripeProduct, error) {
 	client, err := utils.GetClientFromContext(ctx)
 
 	if err != nil {

@@ -1,0 +1,24 @@
+type Mutation {
+    stripeCreateCustomer(input: StripeCustomerInput!): StripeCustomer
+    stripeUpdateCustomer(id: String!, input: StripeCustomerInput!): StripeCustomer
+    stripeDeleteCustomer(id: String!): StripeCustomer
+    stripeCreateSubscription(input: StripeCreateSubscriptionInput!): StripeSubscription
+    stripeUpdateSubscription(id: String!, input: StripeUpdateSubscriptionInput!): StripeSubscription
+    stripeCancelSubscription(id: String!): StripeSubscription
+}
+
+input StripeSubscriptionItemInput {
+    price: String
+    priceData: StripePriceDataInput
+}
+
+input StripePriceDataInput {
+    currency: currencyTypes!
+    product: String!
+    recurring: StripePriceDataRecurringInput
+}
+
+input StripePriceDataRecurringInput {
+    interval: recurringInterval!
+    intervalCount: Int
+}

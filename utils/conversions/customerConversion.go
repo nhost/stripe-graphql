@@ -5,7 +5,7 @@ import (
 	"github.com/stripe/stripe-go/v72"
 )
 
-func ConvertCustomer(old_customer *stripe.Customer) *model.Customer {
+func ConvertCustomer(old_customer *stripe.Customer) *model.StripeCustomer {
 	currency := string(old_customer.Currency)
 	address := ConvertAddress(&old_customer.Address)
 	var subscriptions []*model.StripeSubscription
@@ -14,7 +14,7 @@ func ConvertCustomer(old_customer *stripe.Customer) *model.Customer {
 			subscriptions = append(subscriptions, ConvertSubscription(sub))
 		}
 	}
-	new_customer := &model.Customer{
+	new_customer := &model.StripeCustomer{
 		ID:            old_customer.ID,
 		Name:          old_customer.Name,
 		Email:         old_customer.Email,
@@ -29,8 +29,8 @@ func ConvertCustomer(old_customer *stripe.Customer) *model.Customer {
 	return new_customer
 }
 
-func ConvertAddress(old_address *stripe.Address) *model.Address {
-	new_address := &model.Address{
+func ConvertAddress(old_address *stripe.Address) *model.StripeAddress {
+	new_address := &model.StripeAddress{
 		City:       &old_address.City,
 		Country:    &old_address.Country,
 		PostalCode: &old_address.PostalCode,

@@ -1,6 +1,4 @@
-package graph
-
-//go:generate go run github.com/99designs/gqlgen
+package resolvers
 
 // This file will not be regenerated automatically.
 //

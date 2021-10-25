@@ -1,4 +1,4 @@
-type Product {
+type StripeProduct {
   id: String!
   object: String!
   active: Boolean!
@@ -6,5 +6,5 @@ type Product {
   description: String!
   livemode: Boolean!
   name: String!
-  prices: [Price!]
+  prices: [StripePrice!]
 }

@@ -1,4 +1,4 @@
-package graph
+package resolvers
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -13,7 +13,7 @@ import (
 	stripe "github.com/stripe/stripe-go/v72"
 )
 
-func (r *customerResolver) PaymentMethods(ctx context.Context, obj *model.Customer, typeArg *model.PaymentMethodTypes) ([]*model.PaymentMethod, error) {
+func (r *stripeCustomerResolver) PaymentMethods(ctx context.Context, obj *model.StripeCustomer, typeArg *model.PaymentMethodTypes) ([]*model.StripePaymentMethod, error) {
 	client, err := utils.GetClientFromContext(ctx)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (r *customerResolver) PaymentMethods(ctx context.Context, obj *model.Custom
 		return nil, err
 	}
 
-	var converted []*model.PaymentMethod
+	var converted []*model.StripePaymentMethod
 
 	for pms.Next() {
 		converted = append(converted, conversions.ConvertPaymentMethod(pms.PaymentMethod()))
@@ -43,7 +43,9 @@ func (r *customerResolver) PaymentMethods(ctx context.Context, obj *model.Custom
 	return converted, nil
 }
 
-// Customer returns generated.CustomerResolver implementation.
-func (r *Resolver) Customer() generated.CustomerResolver { return &customerResolver{r} }
+// StripeCustomer returns generated.StripeCustomerResolver implementation.
+func (r *Resolver) StripeCustomer() generated.StripeCustomerResolver {
+	return &stripeCustomerResolver{r}
+}
 
-type customerResolver struct{ *Resolver }
+type stripeCustomerResolver struct{ *Resolver }
